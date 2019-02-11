@@ -3,4 +3,6 @@ project(Lem_in C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Lem_in main.c)
+AUX_SOURCE_DIRECTORY(libft LIBA)
+add_executable(Lem_in ${LIBA} main.c lemin.h)
+link_libraries(./libft/libft.a)
