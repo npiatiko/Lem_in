@@ -18,11 +18,44 @@ void	ft_room_add(t_room **head, t_room *new)
 	*head = new;
 }
 
+void ft_link_add(t_room *graph, char **data)
+{
+	t_room *tmp;
+	t_link *link;
+
+	tmp = graph;
+	while (graph)
+	{
+		if(ft_strequ(graph->name, data[0]))
+		{
+			while (tmp)
+			{
+				if (ft_strequ(tmp->name, data[1]))
+				{
+					link = ft_memalloc(sizeof(t_link));
+					link->room = tmp;
+					link->next = graph->links;
+					graph->links = link;
+					return;
+				}
+				tmp = tmp->next;
+			}
+		}
+		graph = graph->next;
+	}
+}
+
 void ft_print_graph(t_room *head)
 {
 	while (head)
 	{
-		ft_printf("%s, %d, %d, %c\n", head->name, head->x, head->y, head->type);
+		ft_printf("%s, %d, %d, %c", head->name, head->x, head->y, head->type);
+		while (head->links)
+		{
+			ft_printf(" -> %s", head->links->room->name);
+			head->links = head->links->next;
+		}
+		ft_printf("\n");
 		head = head->next;
 	}
 }
@@ -69,7 +102,7 @@ int main()
 		{
 
 			typeroom = (char)(ft_strequ(line, "##start") ? 's' : typeroom);
-			typeroom = (char)(ft_strequ(line, "##end") ? 'e' : 'n');
+			typeroom = (char)(ft_strequ(line, "##end") ? 'e' : typeroom);
 			free(line);
 			continue;
 		}
@@ -78,6 +111,14 @@ int main()
 		{
 			words = ft_strsplit(line, ' ');
 			ft_room_add(&graph, ft_new_room(words, typeroom));
+			free(words);
+		}
+		typeroom = 'n';
+
+		if (ft_strchr(line, '-'))
+		{
+			words = ft_strsplit(line, '-');
+			ft_link_add(graph, words);
 			free(words);
 		}
 //		ft_printf("%s\n", line);

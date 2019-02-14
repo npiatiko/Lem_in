@@ -3,15 +3,27 @@
 
 #include "./libft/libft.h"
 
+int					g_ants;
 typedef struct		s_room
 {
 	char			*name;
 	char			type; /*s-start, e-end, n-normal*/
 	int				x;
 	int				y;
-	struct s_room	*link;
+	struct s_link	*links;
 	struct s_room	*next;
 }					t_room;
-int					g_ants;
+
+typedef	struct		s_link
+{
+	struct s_room	*room;
+	struct s_link	*next;
+}					t_link;
+
+typedef	struct		s_way
+{
+	struct s_room	*room;
+	struct s_way	*next;
+}					t_way;
 
 #endif
