@@ -8,6 +8,7 @@ typedef struct		s_room
 {
 	char			*name;
 	char			type; /*s-start, e-end, n-normal*/
+	int 			dist;
 	int				x;
 	int				y;
 	struct s_link	*links;

@@ -49,7 +49,7 @@ void ft_print_graph(t_room *head)
 {
 	while (head)
 	{
-		ft_printf("%s, %d, %d, %c", head->name, head->x, head->y, head->type);
+		ft_printf("%s, %d, %d, %c, %d", head->name, head->x, head->y, head->type, head->dist);
 		while (head->links)
 		{
 			ft_printf(" -> %s", head->links->room->name);
@@ -69,22 +69,22 @@ int ft_isnbr(char *str)
 	}
 	return 1;
 }
-int main()
-{
-//	ft_printf("%.20f", 9.2);
 
+t_room	*ft_parsing(t_room **start)
+{
 	char	**words;
 	char	*line;
 	char	typeroom;
 	t_room	*graph;
+	int	fd;
 
+	fd = open("graph", O_RDONLY);
 	graph = NULL;
 	g_ants = 0;
 	typeroom = 'n';
 
-	while (get_next_line(0, &line) > 0)
+	while (get_next_line(fd, &line) > 0)
 	{
-
 		if (ft_isnbr(line))
 		{
 			g_ants = ft_atoi(line);
@@ -112,6 +112,8 @@ int main()
 			words = ft_strsplit(line, ' ');
 			ft_room_add(&graph, ft_new_room(words, typeroom));
 			free(words);
+			if (typeroom == 's')
+				*start = graph;
 		}
 		typeroom = 'n';
 
@@ -124,7 +126,45 @@ int main()
 //		ft_printf("%s\n", line);
 
 	}
-//	ft_printf("%d\n", g_ants);
+	close(fd);
+	return (graph);
+}
+
+t_link	*ft_linknew(t_room *room)
+{
+	t_link *newlink;
+
+	if ((newlink = (t_link *)ft_memalloc(sizeof(t_link))) == NULL)
+		return (NULL);
+	return (newlist);
+}
+
+void ft_searchway(t_room *graph, t_room *start)
+{
+	t_link	*queue;
+
+	queue = ;
+	while (queue)
+	{
+		while ()
+		{
+			if (((t_room *)(((t_room *)(queue->content))->links->content))->dist == 0)
+			{
+				ft_list_push_back(queue, ft_lstnew(((t_room *)(((t_room *)(queue->content))->links->content))->))
+			}
+		}
+	}
+}
+int main()
+{
+//	ft_printf("%.0f", 1.5);
+	t_room	*graph;
+	t_room	*start;
+
+	graph = ft_parsing(&start);
 	ft_print_graph(graph);
+
+	ft_printf("start = %s\n", start->name);
+	ft_printf("%d\n", g_ants);
 	return 0;
 }
