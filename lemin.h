@@ -12,6 +12,7 @@ typedef struct		s_room
 	int				x;
 	int				y;
 	struct s_link	*links;
+	struct s_link	*prev;
 	struct s_room	*next;
 }					t_room;
 
