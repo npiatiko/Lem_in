@@ -24,8 +24,8 @@ typedef	struct		s_link
 
 typedef	struct		s_way
 {
-	struct s_room	*room;
-	struct s_way	*next;
+	struct s_link	*way;
+	struct s_way	*next_way;
 }					t_way;
 
 #endif

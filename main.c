@@ -24,6 +24,21 @@ void	ft_link_push_front(t_link **queue, t_link *newlink)
 	*queue = newlink;
 }
 
+t_link	*ft_link_pop(t_link **queue)
+{
+	t_link *link;
+
+	if (*queue)
+	{
+		link = *queue;
+		*queue = (*queue)->next;
+		link->next = NULL;
+	}
+	else
+		link = NULL;
+	return link;
+}
+
 t_link	*ft_linknew(t_room *room)
 {
 	t_link *newlink;
@@ -63,7 +78,7 @@ void ft_link_add(t_room *graph, char **data)
 	}
 }
 
-void ft_print_graph(t_room *head, t_link *way)
+void ft_print_graph(t_room *head)
 {
 	while (head)
 	{
@@ -85,6 +100,10 @@ void ft_print_graph(t_room *head, t_link *way)
 		ft_printf("\n");
 		head = head->next;
 	}
+}
+
+void	ft_print_way(t_link *way)
+{
 	ft_printf("way : ");
 	while (way)
 	{
@@ -93,6 +112,7 @@ void ft_print_graph(t_room *head, t_link *way)
 	}
 	ft_printf("\n");
 }
+
 int ft_isnbr(char *str)
 {
 	while (*str)
@@ -212,15 +232,21 @@ t_link *ft_search_way(t_room *exit)
 	t_link *way;
 	t_room *cur;
 
-	cur = exit;
-	way = NULL;
+//	cur = exit;
+	way = ft_linknew(exit);
+	if (exit->prev)
+		cur = ft_link_pop(&(exit->prev))->room;
+	else
+		return NULL;
 	while (cur)
 	{
 		ft_link_push_front(&way, ft_linknew(cur));
 		if (cur->prev)
-			cur = cur->prev->room;
-		else
+			cur = ft_link_pop(&(cur->prev))->room;
+		else if (cur->type == 's')
 			break;
+		else
+			return NULL;
 	}
 	return (way);
 }
@@ -235,8 +261,10 @@ int main()
 
 	graph = ft_parsing(&start, &exit);
 	ft_BFS(start);
-	way = ft_search_way(exit);
-	ft_print_graph(graph, way);
+
+//	ft_print_graph(graph);
+	while ((way = ft_search_way(exit)))
+		ft_print_way(way);
 	ft_printf("start = %s\n", start->name);
 	ft_printf("exit = %s\n", exit->name);
 	ft_printf("%d\n", g_ants);
