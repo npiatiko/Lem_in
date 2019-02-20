@@ -2,6 +2,7 @@
 #define LEMIN_H
 
 #include "./libft/libft.h"
+#include <limits.h>
 
 int					g_ants;
 typedef struct		s_room

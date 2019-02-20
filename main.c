@@ -1,14 +1,19 @@
 #include "lemin.h"
+#define FILENAME "graphbig"
 
 t_room	*ft_new_room(char **data, char typeroom)
 {
 	t_room	*new;
 
-	new = (t_room *)ft_memalloc(sizeof(t_room));
+	new = (t_room *)malloc(sizeof(t_room));
 	new->name = ft_strdup(data[0]);
 	new->x = ft_atoi(data[1]);
 	new->y = ft_atoi(data[2]);
 	new->type = typeroom;
+	new->dist = typeroom == 's' ? 0 : INT_MAX;
+	new->links = NULL;
+	new->prev = NULL;
+	new->next = NULL;
 	return (new);
 }
 
@@ -50,7 +55,7 @@ t_link	*ft_linknew(t_room *room)
 	return (newlink);
 }
 
-void ft_link_add(t_room *graph, char **data)
+void ft_neighbour_add(t_room *graph, char **data)
 {
 	t_room *tmp;
 	t_link *link;
@@ -82,20 +87,24 @@ void ft_print_graph(t_room *head)
 {
 	while (head)
 	{
-		ft_printf("room name :%s, %c, %d", head->name, head->type, head->dist);
-		if (head->links)
+		t_link *tmp;
+
+		ft_printf("room name :%s, %c, %d, x = %d", head->name, head->type, head->dist, head->x);
+		tmp = head->links;
+		if (tmp)
 			ft_printf(" links to: ");
-		while (head->links)
+		while (tmp)
 		{
-			ft_printf(", %s", head->links->room->name);
-			head->links = head->links->next;
+			ft_printf(", %s", tmp->room->name);
+			tmp = tmp->next;
 		}
-		if (head->prev)
+		tmp = head->prev;
+		if (tmp)
 			ft_printf("   prev: ");
-		while (head->prev)
+		while (tmp)
 		{
-			ft_printf(", %s", head->prev->room->name);
-			head->prev = head->prev->next;
+			ft_printf(", %s", tmp->room->name);
+			tmp = tmp->next;
 		}
 		ft_printf("\n");
 		head = head->next;
@@ -132,7 +141,7 @@ t_room *ft_parsing(t_room **start, t_room **exit)
 	t_room	*graph;
 	int	fd;
 
-	fd = open("graphbig", O_RDONLY);
+	fd = open(FILENAME, O_RDONLY);
 	graph = NULL;
 	g_ants = 0;
 	typeroom = 'n';
@@ -176,7 +185,7 @@ t_room *ft_parsing(t_room **start, t_room **exit)
 		if (ft_strchr(line, '-'))
 		{
 			words = ft_strsplit(line, '-');
-			ft_link_add(graph, words);
+			ft_neighbour_add(graph, words);
 			free(words);
 		}
 //		ft_printf("%s\n", line);
@@ -201,6 +210,40 @@ void	ft_link_push_back(t_link **queue, t_link *newlink)
 	tmp->next = newlink;
 }
 
+void	ft_link_add_sort(t_link **queue, t_link *newlink)
+{
+	t_link *tmp;
+	t_link *prev;
+
+	tmp = *queue;
+	if (!tmp)
+	{
+		*queue = newlink;
+		return ;
+	}
+	prev = NULL;
+	while (tmp)
+	{
+		if (newlink->room->dist <= tmp->room->dist)
+			break;
+		else
+		{
+			prev = tmp;
+			tmp = tmp->next;
+		}
+	}
+	if (prev == NULL)
+	{
+		newlink->next = *queue;
+		*queue = newlink;
+	}
+	else
+	{
+		newlink->next = tmp;
+		prev->next = newlink;
+	}
+}
+
 void ft_BFS(t_room *start)
 {
 	t_link	*queue;
@@ -213,12 +256,17 @@ void ft_BFS(t_room *start)
 		tmp = queue->room->links;
 		while (tmp)
 		{
+//			ft_link_add_sort(&(tmp->room->prev), ft_linknew(queue->room));
 			ft_link_push_front(&(tmp->room->prev), ft_linknew(queue->room));
-			if (tmp->room->dist == 0)
+//			ft_link_push_back(&(tmp->room->prev), ft_linknew(queue->room));
+
+			if (tmp->room->dist == INT_MAX)
 			{
 				tmp->room->dist = queue->room->dist + 1;
 				ft_link_push_back(&queue, ft_linknew(tmp->room));
 			}
+			else if (queue->room->dist + 1 < tmp->room->dist)
+				tmp->room->dist = queue->room->dist + 1;
 			tmp = tmp->next;
 		}
 		tmp = queue;
@@ -262,7 +310,7 @@ int main()
 	graph = ft_parsing(&start, &exit);
 	ft_BFS(start);
 
-//	ft_print_graph(graph);
+	ft_print_graph(graph);
 	while ((way = ft_search_way(exit)))
 		ft_print_way(way);
 	ft_printf("start = %s\n", start->name);
