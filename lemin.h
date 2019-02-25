@@ -3,7 +3,7 @@
 
 #include "./libft/libft.h"
 #include <limits.h>
-#define FILENAME "graph1"
+#define FILENAME "graphbigsuper"
 
 int					g_ants;
 typedef struct		s_room
@@ -34,6 +34,13 @@ typedef	struct		s_way
 	int				lenway;
 }					t_way;
 
+typedef	struct		s_massway
+{
+	struct s_way		*way;
+	struct s_massway	*next_mass;
+	int					lenway;
+}					t_massway;
+
 t_room	*ft_parsing(t_room **start, t_room **exit);
 void	ft_link_push_front(t_link **queue, t_link *newlink);
 t_link	*ft_link_pop(t_link **queue);
@@ -50,4 +57,5 @@ void	ft_link_insert(t_link **queue, t_link *newlink);
 int		ft_waylen(t_link *way);
 void	ft_way_insert(t_way **listway, t_way *newway);
 t_way	*ft_waynew(t_link *way);
+t_link *ft_search_way2(t_room *exit);
 #endif

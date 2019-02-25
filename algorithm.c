@@ -69,3 +69,43 @@ t_link *ft_search_way(t_room *exit)
 	}
 	return (way);
 }
+
+t_link *ft_search_way2(t_room *exit)
+{
+	t_link	*way;
+	t_room	*cur;
+	t_room	*tmp;
+	char 	newway;
+
+	cur = exit;
+	newway = 0;
+	way = NULL;
+//	way = ft_linknew(exit);
+//	cur = exit->prev->room;
+//	newway = (char)(exit->prev->used ? 0 : 1);
+//	exit->prev->used = 1;
+//	ft_queue_rot(&(exit->prev));
+	while (cur)
+	{
+		ft_link_push_front(&way, ft_linknew(cur));
+		if (cur->prev)
+		{
+			newway = (char)(cur->prev->used ? newway : 1);
+			cur->prev->used = 1;
+			tmp = cur;
+			cur = cur->prev->room;
+//			if (!newway)
+				ft_queue_rot(&(tmp->prev));
+		}
+		else if (cur->type == 's')
+			break;
+	}
+	if (newway)
+		return way;
+	else
+	{
+		ft_printf("!!!!!!!\n");
+		ft_print_list_links(way);
+		return (NULL);
+	}
+}
