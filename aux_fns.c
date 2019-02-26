@@ -17,7 +17,7 @@ void ft_print_graph(t_room *head)
 	{
 		t_link *tmp;
 
-		ft_printf("room name :%s, %c, dist = %d, x = %d", head->name, head->type, head->dist, head->x);
+		ft_printf("room name :%s, %c, dist = %d, used = %d", head->name, head->type, head->dist, head->used);
 //		tmp = head->links;
 		if (head->links)
 			ft_printf(" links to: ");
@@ -53,4 +53,13 @@ int ft_isnbr(char *str)
 		str++;
 	}
 	return 1;
+}
+
+void	ft_swap(int *a, int *b)
+{
+	int tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
 }

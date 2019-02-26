@@ -104,8 +104,8 @@ t_link *ft_search_way2(t_room *exit)
 		return way;
 	else
 	{
-		ft_printf("!!!!!!!\n");
-		ft_print_list_links(way);
+//		ft_printf("!!!!!!!\n");
+//		ft_print_list_links(way);
 		return (NULL);
 	}
 }
