@@ -30,14 +30,14 @@ int main()
 		ft_routeaaray_insert(&arraylist, ft_new_routearray(allways, tmp));
 		tmp = tmp->next_way;
 	}
-//	while (arraylist)
-//	{
-//		ft_printf("array:\n");
-//		ft_print_ways(arraylist->way);
-//		arraylist = arraylist->next_array;
-//	}
+	while (arraylist)
+	{
+		ft_printf("array:\n");
+		ft_print_ways(arraylist->way);
+		ft_move_ants(arraylist, exit);
+		arraylist = arraylist->next_array;
+	}
 //	ft_print_graph(graph);
-ft_move_ants(arraylist, exit);
 	ft_printf("start = %s\n", start->name);
 	ft_printf("exit = %s\n", exit->name);
 	ft_printf("%d\n", g_ants);

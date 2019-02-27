@@ -3,7 +3,7 @@
 
 #include "./libft/libft.h"
 #include <limits.h>
-#define FILENAME "graph1"
+#define FILENAME "big"
 
 int					g_ants;
 typedef struct		s_room
@@ -29,6 +29,7 @@ typedef	struct		s_link
 
 typedef	struct		s_way
 {
+	char			used;
 	struct s_link	*way;
 	struct s_way	*next_way;
 	int				lenway;

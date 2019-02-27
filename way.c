@@ -18,6 +18,7 @@ t_way	*ft_waynew(t_link *way)
 	t_way *newway;
 
 	newway = malloc(sizeof(t_way));
+	newway->used = 0;
 	newway->way = way;
 	newway->lenway = ft_waylen(way) - 1;
 	return (newway);
