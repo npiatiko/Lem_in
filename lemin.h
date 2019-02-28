@@ -3,7 +3,13 @@
 
 #include "./libft/libft.h"
 #include <limits.h>
-#define FILENAME "big"
+//#define FILENAME "big-superposition"
+//#define FILENAME "big"
+//#define FILENAME "flow-one"
+//#define FILENAME "flow-ten"
+//#define FILENAME "flow-thousend"
+#define FILENAME "graph1"
+
 
 int					g_ants;
 typedef struct		s_room
@@ -63,4 +69,6 @@ void		ft_resetgraph(t_room *graph);
 void		ft_routeaaray_insert(t_routearray **head, t_routearray *newarray);
 t_routearray	*ft_new_routearray(t_way *allways, t_way *currentway);
 void ft_move_ants(t_routearray *arraylist, t_room *exit);
+t_way	*ft_way_pop(t_way **listway);
+t_link	*ft_search_way3(t_room *exit);
 #endif

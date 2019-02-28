@@ -30,7 +30,7 @@ void ft_BFS(t_room *start)
 	}
 }
 
-t_link *ft_search_way(t_room *exit)
+t_link *ft_search_way1(t_room *exit)
 {
 	t_link *way;
 	t_room *cur;
@@ -46,7 +46,7 @@ t_link *ft_search_way(t_room *exit)
 		ft_link_push_front(&way, ft_linknew(cur));
 		if (cur->prev && !(cur->used))
 		{
-//			cur->used = 1;//(char) (cur->type == 's' ? 0 : 1);
+			cur->used = 1;//(char) (cur->type == 's' ? 0 : 1);
 			cur = ft_link_pop(&(cur->prev))->room;
 		}
 		else if (cur->type == 's')
@@ -62,8 +62,8 @@ t_link *ft_search_way(t_room *exit)
 		}
 		else
 		{
-			ft_printf("!!\n");
-			ft_print_list_links(way);
+//			ft_printf("!!\n");
+//			ft_print_list_links(way);
 			return NULL;
 		}
 	}
@@ -108,4 +108,32 @@ t_link *ft_search_way2(t_room *exit)
 //		ft_print_list_links(way);
 		return (NULL);
 	}
+}
+
+t_link	*ft_search_way3(t_room *exit)
+{
+	static t_way *queueways = (t_way *) 1;
+	t_link	*tmpway;
+	t_way	*curway;
+
+	if (queueways == (t_way *) 1)
+	{
+		ft_printf("if = %p\n", queueways);
+		queueways = ft_waynew(ft_linknew(exit));
+	}
+	else
+	{
+		ft_printf("else = %p\n", queueways);
+	}
+	return 0;
+	curway = ft_way_pop(&queueways);
+	tmpway = curway->way;
+	while (tmpway->room->type != 's')
+	{
+		if (tmpway->next)
+			tmpway = tmpway->next;
+	}
+	tmpway = curway->way;
+	free(curway);
+	return (tmpway);
 }

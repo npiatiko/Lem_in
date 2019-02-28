@@ -22,8 +22,11 @@ int main()
 	{
 		ft_way_insert(&allways, ft_waynew(way));
 	}
-//	ft_print_ways(allways);
-	tmp = allways;
+	ft_print_ways(allways);
+	ft_search_way3(exit);
+	ft_search_way3(exit);
+
+/*	tmp = allways;
 	while (tmp)
 	{
 		ft_resetgraph(graph);
@@ -36,7 +39,7 @@ int main()
 		ft_print_ways(arraylist->way);
 		ft_move_ants(arraylist, exit);
 		arraylist = arraylist->next_array;
-	}
+	}*/
 //	ft_print_graph(graph);
 	ft_printf("start = %s\n", start->name);
 	ft_printf("exit = %s\n", exit->name);

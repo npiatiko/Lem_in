@@ -62,7 +62,7 @@ t_link	*ft_linknew(t_room *room)
 	if ((newlink = (t_link *)malloc(sizeof(t_link))) == NULL)
 		return (NULL);
 	newlink->room = room;
-	newlink->next = 0;
+	newlink->next = NULL;
 	newlink->used = 0;
 	return (newlink);
 }

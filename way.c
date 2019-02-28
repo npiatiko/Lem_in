@@ -23,6 +23,27 @@ t_way	*ft_waynew(t_link *way)
 	newway->lenway = ft_waylen(way) - 1;
 	return (newway);
 }
+
+void	ft_way_push_front(t_way **listway, t_way *newway)
+{
+	newway->next_way = *listway;
+	*listway = newway;
+}
+
+t_way	*ft_way_pop(t_way **listway)
+{
+	t_way *way;
+
+	if (*listway)
+	{
+		way = *listway;
+		way->next_way = NULL;
+		*listway = (*listway)->next_way;
+	}
+	else
+		way = NULL;
+	return way;
+}
 void	ft_way_insert(t_way **listway, t_way *newway)
 {
 	t_way *head;
