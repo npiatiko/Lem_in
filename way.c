@@ -21,9 +21,27 @@ t_way	*ft_waynew(t_link *way)
 	newway->used = 0;
 	newway->way = way;
 	newway->lenway = ft_waylen(way) - 1;
+	newway->next_way = NULL;
 	return (newway);
 }
 
+t_way	*ft_copyway(t_link *source, t_link *newlink)
+{
+	t_way	*newway;
+	t_link	*tmp;
+
+	newway = ft_waynew(NULL);
+	newway->way = ft_linknew(source->room);
+	tmp = newway->way;
+	while (source->next->next)
+	{
+		source = source->next;
+		tmp->next = ft_linknew(source->room);
+		tmp = tmp->next;
+	}
+	tmp->next = ft_linknew(newlink->room);
+	return (newway);
+}
 void	ft_way_push_front(t_way **listway, t_way *newway)
 {
 	newway->next_way = *listway;
@@ -37,8 +55,8 @@ t_way	*ft_way_pop(t_way **listway)
 	if (*listway)
 	{
 		way = *listway;
-		way->next_way = NULL;
 		*listway = (*listway)->next_way;
+		way->next_way = NULL;
 	}
 	else
 		way = NULL;

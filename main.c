@@ -18,15 +18,15 @@ int main()
 	ft_BFS(start);
 
 	ft_print_graph(graph);
-	while ((way = ft_search_way2(exit)))
+//	ft_print_list_links(ft_search_way3(exit));
+	while ((way = ft_search_way3(exit, graph)))
 	{
+//		ft_print_list_links(way);
+//		ft_printf("\n");
 		ft_way_insert(&allways, ft_waynew(way));
 	}
 	ft_print_ways(allways);
-	ft_search_way3(exit);
-	ft_search_way3(exit);
-
-/*	tmp = allways;
+	tmp = allways;
 	while (tmp)
 	{
 		ft_resetgraph(graph);
@@ -36,10 +36,10 @@ int main()
 	while (arraylist)
 	{
 		ft_printf("array:\n");
-		ft_print_ways(arraylist->way);
-		ft_move_ants(arraylist, exit);
+//		ft_print_ways(arraylist->way);
+		ft_move_ants(arraylist, start);
 		arraylist = arraylist->next_array;
-	}*/
+	}
 //	ft_print_graph(graph);
 	ft_printf("start = %s\n", start->name);
 	ft_printf("exit = %s\n", exit->name);

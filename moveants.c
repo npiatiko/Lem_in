@@ -41,7 +41,7 @@ void ft_move_ants(t_routearray *arraylist, t_room *exit)
 			while (curway)
 			{
 
-				if (curway->room->type == 's')
+				if (curway->room->type == 'e')
 				{
 					if (curway->room->ant > expression)
 					{
