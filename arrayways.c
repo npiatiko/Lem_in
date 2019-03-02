@@ -9,6 +9,15 @@ void	ft_resetgraph(t_room *graph)
 	}
 }
 
+void	ft_resetdist(t_room *graph)
+{
+	while (graph)
+	{
+		graph->dist = INT_MAX;
+		graph = graph->next;
+	}
+}
+
 void	ft_visitroom(t_way *way)
 {
 	t_link *tmp;

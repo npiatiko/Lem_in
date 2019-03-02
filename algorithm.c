@@ -1,6 +1,5 @@
 #include "lemin.h"
 
-
 void ft_BFS(t_room *start)
 {
 	t_link	*queue;
@@ -22,6 +21,39 @@ void ft_BFS(t_room *start)
 			}
 			else if (queue->room->dist + 1 < tmp->room->dist)
 				tmp->room->dist = queue->room->dist + 1;
+			tmp = tmp->next;
+		}
+		tmp = queue;
+		queue = queue->next;
+		free(tmp);
+	}
+}
+
+void ft_BFS2(t_room *start)
+{
+	t_link	*queue;
+	t_link	*tmp;
+
+	start->prev = NULL;
+	queue = ft_linknew(start);
+	while (queue)
+	{
+		tmp = queue->room->links;
+		while (tmp)
+		{
+			if (tmp->room->dist == INT_MAX && !tmp->room->used)
+			{
+				tmp->room->dist = queue->room->dist + 1;
+				ft_link_push_back(&queue, ft_linknew(tmp->room));
+			}
+			else if (queue->room->dist + 1 < tmp->room->dist && !tmp->room->used)
+			{
+				tmp->room->dist = queue->room->dist + 1;
+				if (tmp->room->prev)
+					tmp->room->prev->room = queue->room;
+			}
+			if (tmp->room->type != 's' && !tmp->room->used && !tmp->room->prev)
+				tmp->room->prev = ft_linknew(queue->room);
 			tmp = tmp->next;
 		}
 		tmp = queue;
@@ -131,6 +163,7 @@ t_link *ft_search_way3(t_room *exit, t_room *graph)
 		tmpway->room->used = 1;
 		if (tmpway->next)
 		{
+			(curway->lenway)++;
 			tmpway = tmpway->next;
 		}
 		else
@@ -161,4 +194,23 @@ t_link *ft_search_way3(t_room *exit, t_room *graph)
 	tmpway = curway->way;
 	free(curway);
 	return (tmpway);
+}
+
+t_link *ft_search_way_BFS2(t_room *exit)
+{
+	t_link *way;
+	t_link *cur;
+
+	way = ft_linknew(exit);
+	cur = way;
+	while (cur->room->prev)
+	{
+		if (cur->room->type == 'n')
+			cur->room->used = 1;
+		cur->next = ft_link_pop(&cur->room->prev);
+		cur = cur->next;
+	}
+	if (cur->room->type == 's')
+		return (way);
+	return NULL;
 }

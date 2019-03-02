@@ -52,8 +52,8 @@ void ft_move_ants(t_routearray *arraylist, t_room *exit)
 				}
 				else
 				{
-//					if (ant)
-//						ft_printf("L%d-%s ", ant, curway->room->name);
+					if (ant)
+						ft_printf("L%d-%s ", ant, curway->room->name);
 					if (curway->room->type == 'n')
 						ft_swap(&ant, &(curway->room->ant));
 					else if (ant)
@@ -66,7 +66,7 @@ void ft_move_ants(t_routearray *arraylist, t_room *exit)
 			}
 			curlistway = curlistway->next_way;
 		}
-//		ft_printf("\n");
+		ft_printf("\n");
 	}
 	ft_printf("i = %d\n", i);
 
