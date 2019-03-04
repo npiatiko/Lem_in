@@ -51,10 +51,11 @@ t_routearray	*ft_new_routearray(t_way *allways, t_way *currentway)
 
 	newarray = NULL;
 	ft_visitroom(currentway);
-	if (!(currentway->used))
+//	if (!(currentway->used))
+	if (1)
 	{
 		newarray = (t_routearray *) malloc(sizeof(t_routearray));
-		currentway->used = 1;
+//		currentway->used = 1;
 		newarray->way = ft_waynew(currentway->way);
 		newarray->next_array = 0;
 	}
@@ -70,7 +71,7 @@ t_routearray	*ft_new_routearray(t_way *allways, t_way *currentway)
 				newarray->next_array = 0;
 			}
 			ft_visitroom(allways);
-			allways->used = 1;
+//			allways->used = 1;
 			ft_way_insert(&(newarray->way), ft_waynew(allways->way));
 		}
 		allways = allways->next_way;

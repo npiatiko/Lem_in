@@ -1,6 +1,6 @@
 #include "lemin.h"
 
-int main1()
+int main()
 {
 //	ft_printf("%.0f", 1.5);
 	t_room		*graph;
@@ -10,6 +10,7 @@ int main1()
 	t_way		*allways;
 	t_way		*tmp;
 	t_routearray	*arraylist;
+	int iter;
 
 
 	allways = NULL;
@@ -19,13 +20,13 @@ int main1()
 
 	ft_print_graph(graph);
 //	ft_print_list_links(ft_search_way3(exit));
-	while ((way = ft_search_way1(exit)))
+	while ((way = ft_search_way3(exit, graph)))
 	{
-//		ft_print_list_links(way);
-//		ft_printf("\n");
+		ft_print_list_links(way);
+		ft_printf("\n");
 		ft_way_insert(&allways, ft_waynew(way));
 	}
-//	ft_print_ways(allways);
+	ft_print_ways(allways);
 	tmp = allways;
 	while (tmp)
 	{
@@ -35,9 +36,14 @@ int main1()
 	}
 	while (arraylist)
 	{
-		ft_printf("array:\n");
-		ft_print_ways(arraylist->way);
-		ft_move_ants(arraylist, exit);
+//		ft_printf("array:\n");
+//		ft_print_ways(arraylist->way);
+		if ((iter = ft_move_ants(arraylist, start)) <= g_required)
+		{
+//			ft_printf("array:\n");
+//			ft_print_ways(arraylist->way);
+			ft_printf("!!i = %d\n", iter);
+		}
 		arraylist = arraylist->next_array;
 	}
 //	ft_print_graph(graph);
@@ -48,7 +54,7 @@ int main1()
 	return 0;
 }
 
-int main()
+int main1()
 {
 	t_room		*graph;
 	t_room		*start;

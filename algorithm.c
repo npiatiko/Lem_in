@@ -12,7 +12,7 @@ void ft_BFS(t_room *start)
 		tmp = queue->room->links;
 		while (tmp)
 		{
-			if (tmp->room->type != 's')
+//			if (tmp->room->type != 's')
 				ft_link_insert(&(tmp->room->prev), ft_linknew(queue->room));
 			if (tmp->room->dist == INT_MAX)
 			{
@@ -169,7 +169,13 @@ t_link *ft_search_way3(t_room *exit, t_room *graph)
 		else
 		{
 			tmpprev = tmpway->room->prev;
-			if (tmpprev->room->used)// || tmpprev->room->dist > tmpway->room->dist)
+			while (tmpprev)
+			{
+				if (tmpprev->room->used == 0)// && tmpprev->room->dist <= tmpway->room->dist)
+					break ;
+				tmpprev = tmpprev->next;
+			}
+			if (tmpprev == NULL)// || tmpprev->room->dist > tmpway->room->dist)
 			{
 				if (queueways)
 				{
@@ -182,9 +188,15 @@ t_link *ft_search_way3(t_room *exit, t_room *graph)
 					return NULL;
 			}
 			tmpway->next = ft_linknew(tmpprev->room);
+//			tmpprev->room->used = 1;
 			tmpprev = tmpprev->next;
+//			tmpprev = tmpway->room->prev;
+			ft_print_list_links(curway->way);
+			ft_printf("!!!\n");
 			while (tmpprev)
 			{
+//				ft_printf("!!!\n");
+//				ft_print_list_links(curway->way);
 				if (tmpprev->room->used == 0)// && tmpprev->room->dist <= tmpway->room->dist)
 					ft_way_push_front(&queueways, ft_copyway(curway->way, tmpprev));
 				tmpprev = tmpprev->next;
@@ -192,6 +204,7 @@ t_link *ft_search_way3(t_room *exit, t_room *graph)
 		}
 	}
 	tmpway = curway->way;
+//	ft_printf("len wa: %d ", curway->lenway);
 	free(curway);
 	return (tmpway);
 }

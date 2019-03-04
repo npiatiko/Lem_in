@@ -4,7 +4,7 @@ void	ft_print_list_links(t_link *way)
 {
 	while (way)
 	{
-		ft_printf("%s", way->room->name);
+		ft_printf("%s", way->room->name, way->room->dist);
 		way = way->next;
 		if (way)
 			ft_printf(" -> ");

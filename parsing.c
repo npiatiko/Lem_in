@@ -39,10 +39,10 @@ void ft_neighbour_add(t_room *graph, char **data)
 				if (ft_strequ(tmp->name, data[1]))
 				{
 
-//					if (graph->type != 'e')
-					ft_link_push_front(&(graph->links), ft_linknew(tmp));
-//					if (tmp->type != 'e')
-//						ft_link_push_front(&(tmp->links), ft_linknew(graph));
+					if (graph->type != 'e' && tmp->type != 's')
+						ft_link_push_front(&(graph->links), ft_linknew(tmp));
+					if (tmp->type != 'e' && graph->type != 's')
+						ft_link_push_front(&(tmp->links), ft_linknew(graph));
 					return;
 				}
 				tmp = tmp->next;
@@ -76,6 +76,8 @@ t_room *ft_parsing(t_room **start, t_room **exit)
 
 		if (line[0] == '#' && line[1] != '#')
 		{
+			if (ft_strcmp(line, "#Here is the number of lines required: "))
+				g_required = ft_atoi(line + 38);
 			free(line);
 			continue;
 		}
