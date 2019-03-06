@@ -3,6 +3,8 @@
 
 #include "./libft/libft.h"
 #include <limits.h>
+#include <stdio.h>
+
 //#define FILENAME "big-superposition"
 #define FILENAME "big"
 //#define FILENAME "flow-one"
@@ -77,4 +79,6 @@ t_way	*ft_copyway(t_link *source, t_link *newlink);
 void ft_BFS2(t_room *start);
 t_link *ft_search_way_BFS2(t_room *exit);
 void	ft_resetdist(t_room *graph);
+void	ft_del_way(t_way *way);
+void	ft_del_links(t_link *list);
 #endif

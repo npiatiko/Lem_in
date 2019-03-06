@@ -1,10 +1,9 @@
 #include "lemin.h"
-
 void	ft_print_list_links(t_link *way)
 {
 	while (way)
 	{
-		ft_printf("%s", way->room->name, way->room->dist);
+		ft_printf("%s", way->room->name);
 		way = way->next;
 		if (way)
 			ft_printf(" -> ");

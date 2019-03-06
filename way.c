@@ -62,6 +62,7 @@ t_way	*ft_way_pop(t_way **listway)
 		way = NULL;
 	return way;
 }
+
 void	ft_way_insert(t_way **listway, t_way *newway)
 {
 	t_way *head;
@@ -83,4 +84,29 @@ void	ft_way_insert(t_way **listway, t_way *newway)
 	newway->next_way = tmp;
 	*listway = head->next_way;
 	free(head);
+}
+
+void	ft_del_links(t_link *list)
+{
+	t_link *tmp;
+
+	while (list)
+	{
+		tmp = list;
+		list = list->next;
+		free(tmp);
+	}
+}
+
+void	ft_del_way(t_way *way)
+{
+	t_way *tmp;
+
+	while (way)
+	{
+		tmp = way;
+		way = way->next_way;
+		ft_del_links(tmp->way);
+		free(tmp);
+	}
 }

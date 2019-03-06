@@ -14,6 +14,8 @@ void	ft_resetdist(t_room *graph)
 	while (graph)
 	{
 		graph->dist = INT_MAX;
+		ft_del_links(graph->prev);
+		graph->prev = NULL;
 		graph = graph->next;
 	}
 }

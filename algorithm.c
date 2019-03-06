@@ -6,18 +6,20 @@ void ft_BFS(t_room *start)
 	t_link	*tmp;
 
 	start->prev = NULL;
+	start->dist = 0;
 	queue = ft_linknew(start);
 	while (queue)
 	{
 		tmp = queue->room->links;
 		while (tmp)
 		{
-//			if (tmp->room->type != 's')
+			if (tmp->room->type != start->type)
 				ft_link_insert(&(tmp->room->prev), ft_linknew(queue->room));
 			if (tmp->room->dist == INT_MAX)
 			{
 				tmp->room->dist = queue->room->dist + 1;
-				ft_link_push_back(&queue, ft_linknew(tmp->room));
+				if (tmp->room->type == 'n')
+					ft_link_push_back(&queue, ft_linknew(tmp->room));
 			}
 			else if (queue->room->dist + 1 < tmp->room->dist)
 				tmp->room->dist = queue->room->dist + 1;
@@ -34,7 +36,7 @@ void ft_BFS2(t_room *start)
 	t_link	*queue;
 	t_link	*tmp;
 
-	start->prev = NULL;
+	start->dist = 0;
 	queue = ft_linknew(start);
 	while (queue)
 	{
@@ -44,16 +46,22 @@ void ft_BFS2(t_room *start)
 			if (tmp->room->dist == INT_MAX && !tmp->room->used)
 			{
 				tmp->room->dist = queue->room->dist + 1;
-				ft_link_push_back(&queue, ft_linknew(tmp->room));
+				if (tmp->room->type == 'n')
+					ft_link_push_back(&queue, ft_linknew(tmp->room));
+				tmp->room->prev = ft_linknew(queue->room);
+
 			}
 			else if (queue->room->dist + 1 < tmp->room->dist && !tmp->room->used)
 			{
 				tmp->room->dist = queue->room->dist + 1;
 				if (tmp->room->prev)
-					tmp->room->prev->room = queue->room;
+				{
+					free(tmp->room->prev);
+					tmp->room->prev = ft_linknew(queue->room);
+				}
 			}
-			if (tmp->room->type != 's' && !tmp->room->used && !tmp->room->prev)
-				tmp->room->prev = ft_linknew(queue->room);
+//			if (tmp->room->type != 'e' && !tmp->room->used && !tmp->room->prev)
+//				tmp->room->prev = ft_linknew(queue->room);
 			tmp = tmp->next;
 		}
 		tmp = queue;
@@ -78,8 +86,10 @@ t_link *ft_search_way1(t_room *exit)
 		ft_link_push_front(&way, ft_linknew(cur));
 		if (cur->prev && !(cur->used))
 		{
-			cur->used = 1;//(char) (cur->type == 's' ? 0 : 1);
-			cur = ft_link_pop(&(cur->prev))->room;
+//			cur->used = 1;//(char) (cur->type == 's' ? 0 : 1);
+//			cur = ft_link_pop(&(cur->prev))->room;
+			cur = cur->prev->room;
+//			ft_queue_rot(&(cur->prev));
 		}
 		else if (cur->type == 's')
 		{
@@ -148,6 +158,7 @@ t_link *ft_search_way3(t_room *exit, t_room *graph)
 	t_link	*tmpway;
 	t_way	*curway;
 	t_link	*tmpprev;
+	int 	i = 0;
 
 	if (!queueways)
 		return NULL;
@@ -160,6 +171,8 @@ t_link *ft_search_way3(t_room *exit, t_room *graph)
 	tmpway = curway->way;
 	while (tmpway->room->type != 's')
 	{
+//		ft_printf("cyclecount %d \n", i);
+
 		tmpway->room->used = 1;
 		if (tmpway->next)
 		{
@@ -175,11 +188,14 @@ t_link *ft_search_way3(t_room *exit, t_room *graph)
 					break ;
 				tmpprev = tmpprev->next;
 			}
-			if (tmpprev == NULL)// || tmpprev->room->dist > tmpway->room->dist)
+			if (tmpprev == NULL)// || curway->lenway > 100)// || tmpprev->room->dist > tmpway->room->dist)
 			{
 				if (queueways)
 				{
+					if (i++ > 1000)
+						return ((t_link *)5);
 					ft_resetgraph(graph);
+					ft_del_way(curway);
 					curway = ft_way_pop(&queueways);
 					tmpway = curway->way;
 					continue;
@@ -191,20 +207,19 @@ t_link *ft_search_way3(t_room *exit, t_room *graph)
 //			tmpprev->room->used = 1;
 			tmpprev = tmpprev->next;
 //			tmpprev = tmpway->room->prev;
-			ft_print_list_links(curway->way);
-			ft_printf("!!!\n");
+//			ft_print_list_links(curway->way);
+//			ft_printf("!!!\n");
 			while (tmpprev)
 			{
 //				ft_printf("!!!\n");
 //				ft_print_list_links(curway->way);
-				if (tmpprev->room->used == 0)// && tmpprev->room->dist <= tmpway->room->dist)
+				if (tmpprev->room->used == 0)// && curway->lenway < 50)// && tmpprev->room->dist <= tmpway->room->dist)
 					ft_way_push_front(&queueways, ft_copyway(curway->way, tmpprev));
 				tmpprev = tmpprev->next;
 			}
 		}
 	}
 	tmpway = curway->way;
-//	ft_printf("len wa: %d ", curway->lenway);
 	free(curway);
 	return (tmpway);
 }
@@ -223,7 +238,7 @@ t_link *ft_search_way_BFS2(t_room *exit)
 		cur->next = ft_link_pop(&cur->room->prev);
 		cur = cur->next;
 	}
-	if (cur->room->type == 's')
+	if ((exit->type == 's' && cur->room->type == 'e') || (exit->type == 'e' && cur->room->type == 's'))
 		return (way);
 	return NULL;
 }

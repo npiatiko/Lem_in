@@ -19,48 +19,39 @@ int ft_move_ants(t_routearray *arraylist, t_room *exit)
 	t_link	*curway;
 	t_way	*curlistway;
 	int i;
-	int ant;
 	int expression;
 
-	ant = 0;
-	expression = 0;
 	i = 0;
-	arraylist->way->way->room->ant = g_ants;
-	exit->ant = 0;
 	while (exit->ant != g_ants)
 	{
 		i++;
-//		ft_printf("%d end :%d  :", i, exit->ant);
 		curlistway = arraylist->way;
-		expression = 0;
 		while (curlistway)
 		{
 			curway = curlistway->way;
 			expression = ft_calc_expr(arraylist->way, curway);
-//			ft_printf("exp = %d ", expression);
-			while (curway)
+			while (curway->next)
 			{
-
-				if (curway->room->type == 'e')
+				if (curway->room->type == 'e' && curway->next->room->ant)
 				{
-					if (curway->room->ant > expression)
+//					ft_printf("L%d-%s ", curway->next->room->ant, curway->room->name);
+					curway->room->ant++;
+					curway->next->room->ant = 0;
+				}
+				else if (curway->next->room->type == 's' && curway->next->room->ant)
+				{
+					if (curway->next->room->ant > expression)
 					{
-						ant = curway->room->ant;
-						if (curway->room->ant > 0)
-							(curway->room->ant)--;
+						curway->room->ant = curway->next->room->ant;
+//						ft_printf("L%d-%s ", curway->room->ant, curway->room->name);
+						curway->next->room->ant--;
 					}
 				}
-				else
+				else if (curway->next->room->ant)
 				{
-//					if (ant)
-//						ft_printf("L%d-%s ", ant, curway->room->name);
-					if (curway->room->type == 'n')
-						ft_swap(&ant, &(curway->room->ant));
-					else if (ant)
-					{
-						ant = 0;
-						(curway->room->ant)++;
-					}
+					curway->room->ant = curway->next->room->ant;
+//					ft_printf("L%d-%s ", curway->room->ant, curway->room->name);
+					curway->next->room->ant = 0;
 				}
 				curway = curway->next;
 			}
@@ -68,6 +59,5 @@ int ft_move_ants(t_routearray *arraylist, t_room *exit)
 		}
 //		ft_printf("\n");
 	}
-//	ft_printf("i = %d\n", i);
 	return i;
 }

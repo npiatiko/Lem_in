@@ -9,7 +9,9 @@ t_room	*ft_new_room(char **data, char typeroom)
 	new->x = ft_atoi(data[1]);
 	new->y = ft_atoi(data[2]);
 	new->type = typeroom;
-	new->dist = typeroom == 's' ? 0 : INT_MAX;
+//	new->dist = typeroom == 's' ? 0 : INT_MAX;
+//	new->dist = typeroom == 'e' ? 0 : INT_MAX;
+	new->dist = INT_MAX;
 	new->links = NULL;
 	new->prev = NULL;
 	new->next = NULL;
@@ -39,9 +41,11 @@ void ft_neighbour_add(t_room *graph, char **data)
 				if (ft_strequ(tmp->name, data[1]))
 				{
 
-					if (graph->type != 'e' && tmp->type != 's')
+//					if (graph->type != 'e' && tmp->type != 's')
+//					if (graph->type != 's' && tmp->type != 'e')
 						ft_link_push_front(&(graph->links), ft_linknew(tmp));
-					if (tmp->type != 'e' && graph->type != 's')
+//					if (tmp->type != 'e' && graph->type != 's')
+//					if (tmp->type != 's' && graph->type != 'e')
 						ft_link_push_front(&(tmp->links), ft_linknew(graph));
 					return;
 				}
