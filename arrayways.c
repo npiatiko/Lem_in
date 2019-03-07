@@ -89,3 +89,41 @@ void	ft_routeaaray_insert(t_routearray **head, t_routearray *newarray)
 		*head = newarray;
 	}
 }
+
+t_routearray	*ft_listroutearray(t_way *allways, t_room *graph)
+{
+	t_way			*tmp;
+	t_routearray	*arraylist;
+
+	arraylist = NULL;
+	tmp = allways;
+	while (tmp)
+	{
+		ft_resetgraph(graph);
+		ft_routeaaray_insert(&arraylist, ft_new_routearray(allways, tmp));
+		tmp = tmp->next_way;
+	}
+	return (arraylist);
+}
+
+t_routearray	*ft_bestroutearray(t_routearray	*arraylist)
+{
+	int				iter;
+	int				tmp;
+	t_routearray	*bestarray;
+
+	iter = INT_MAX;
+	bestarray = NULL;
+	while (arraylist)
+	{
+		g_start->ant = g_ants;
+		g_exit->ant = 0;
+		if ((tmp = ft_move_ants(arraylist, g_exit)) < iter)
+		{
+			iter = tmp;
+			bestarray = arraylist;
+		}
+		arraylist = arraylist->next_array;
+	}
+	return (bestarray);
+}
