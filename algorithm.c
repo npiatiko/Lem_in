@@ -5,7 +5,6 @@ void ft_BFS(t_room *start)
 	t_link	*queue;
 	t_link	*tmp;
 
-	start->prev = NULL;
 	start->dist = 0;
 	queue = ft_linknew(start);
 	while (queue)
@@ -25,9 +24,7 @@ void ft_BFS(t_room *start)
 				tmp->room->dist = queue->room->dist + 1;
 			tmp = tmp->next;
 		}
-		tmp = queue;
-		queue = queue->next;
-		free(tmp);
+		ft_queue_pop(&queue);
 	}
 }
 
@@ -49,109 +46,43 @@ void ft_BFS2(t_room *start)
 				if (tmp->room->type == 'n')
 					ft_link_push_back(&queue, ft_linknew(tmp->room));
 				tmp->room->prev = ft_linknew(queue->room);
-
 			}
 			else if (queue->room->dist + 1 < tmp->room->dist && !tmp->room->used)
 			{
 				tmp->room->dist = queue->room->dist + 1;
-				if (tmp->room->prev)
-				{
-					free(tmp->room->prev);
-					tmp->room->prev = ft_linknew(queue->room);
-				}
+				tmp->room->prev->room = queue->room;
 			}
-//			if (tmp->room->type != 'e' && !tmp->room->used && !tmp->room->prev)
-//				tmp->room->prev = ft_linknew(queue->room);
 			tmp = tmp->next;
 		}
-		tmp = queue;
-		queue = queue->next;
-		free(tmp);
+		ft_queue_pop(&queue);
 	}
 }
 
-t_link *ft_search_way1(t_room *exit)
+t_link	*ft_search_uprev(t_link *tmpprev)
 {
-	t_link *way;
-	t_room *cur;
-
-//	cur = exit;
-	way = ft_linknew(exit);
-	if (exit->prev)
-		cur = ft_link_pop(&(exit->prev))->room;
-	else
-		return NULL;
-	while (cur)
+	while (tmpprev)
 	{
-		ft_link_push_front(&way, ft_linknew(cur));
-		if (cur->prev && !(cur->used))
-		{
-//			cur->used = 1;//(char) (cur->type == 's' ? 0 : 1);
-//			cur = ft_link_pop(&(cur->prev))->room;
-			cur = cur->prev->room;
-//			ft_queue_rot(&(cur->prev));
-		}
-		else if (cur->type == 's')
-		{
-			cur->used = 0;
-			break;
-		}
-
-		else if (exit->prev)
-		{
-			cur = ft_link_pop(&(exit->prev))->room;
-			way = ft_linknew(exit);
-		}
-		else
-		{
-//			ft_printf("!!\n");
-//			ft_print_list_links(way);
-			return NULL;
-		}
+		if (tmpprev->room->used == 0)
+			break ;
+		tmpprev = tmpprev->next;
 	}
-	return (way);
+	return (tmpprev);
 }
 
-t_link *ft_search_way2(t_room *exit)
+t_link	*ft_add_step(t_way *curway, t_link *tmpprev, t_way **queueways)
 {
-	t_link	*way;
-	t_room	*cur;
-	t_room	*tmp;
-	char 	newway;
+	t_link *newstep;
 
-	cur = exit;
-	newway = 0;
-	way = NULL;
-//	way = ft_linknew(exit);
-//	cur = exit->prev->room;
-//	newway = (char)(exit->prev->used ? 0 : 1);
-//	exit->prev->used = 1;
-//	ft_queue_rot(&(exit->prev));
-	while (cur)
+	newstep = ft_linknew(tmpprev->room);
+	tmpprev = tmpprev->next;
+	while (tmpprev)
 	{
-		ft_link_push_front(&way, ft_linknew(cur));
-		if (cur->prev)
-		{
-			newway = (char)(cur->prev->used ? newway : 1);
-			cur->prev->used = 1;
-			tmp = cur;
-			cur = cur->prev->room;
-//			if (!newway)
-				ft_queue_rot(&(tmp->prev));
-		}
-		else if (cur->type == 's')
-			break;
+		if (tmpprev->room->used == 0)
+			ft_way_push_front(queueways, ft_copyway(curway->way, tmpprev));
+		tmpprev = tmpprev->next;
 	}
-	if (newway)
-		return way;
-	else
-	{
-//		ft_printf("!!!!!!!\n");
-//		ft_print_list_links(way);
-		return (NULL);
-	}
+	return (newstep);
 }
-
 t_link *ft_search_way3(t_room *exit, t_room *graph)
 {
 	static t_way *queueways = (t_way *) 1;
@@ -163,39 +94,26 @@ t_link *ft_search_way3(t_room *exit, t_room *graph)
 	if (!queueways)
 		return NULL;
 	if (queueways == (t_way *) 1)
-	{
 		queueways = ft_waynew(ft_linknew(exit));
-	}
 	ft_resetgraph(graph);
 	curway = ft_way_pop(&queueways);
 	tmpway = curway->way;
 	while (tmpway->room->type != 's')
 	{
-//		ft_printf("cyclecount %d \n", i);
-
 		tmpway->room->used = 1;
 		if (tmpway->next)
-		{
-			(curway->lenway)++;
 			tmpway = tmpway->next;
-		}
 		else
 		{
-			tmpprev = tmpway->room->prev;
-			while (tmpprev)
-			{
-				if (tmpprev->room->used == 0)// && tmpprev->room->dist <= tmpway->room->dist)
-					break ;
-				tmpprev = tmpprev->next;
-			}
-			if (tmpprev == NULL)// || curway->lenway > 100)// || tmpprev->room->dist > tmpway->room->dist)
+			tmpprev = ft_search_uprev(tmpway->room->prev);
+			if (tmpprev == NULL)
 			{
 				if (queueways)
 				{
+					ft_del_way(curway);
 					if (i++ > 1000)
 						return ((t_link *)5);
 					ft_resetgraph(graph);
-					ft_del_way(curway);
 					curway = ft_way_pop(&queueways);
 					tmpway = curway->way;
 					continue;
@@ -203,20 +121,15 @@ t_link *ft_search_way3(t_room *exit, t_room *graph)
 				else
 					return NULL;
 			}
-			tmpway->next = ft_linknew(tmpprev->room);
-//			tmpprev->room->used = 1;
-			tmpprev = tmpprev->next;
-//			tmpprev = tmpway->room->prev;
-//			ft_print_list_links(curway->way);
-//			ft_printf("!!!\n");
-			while (tmpprev)
-			{
-//				ft_printf("!!!\n");
-//				ft_print_list_links(curway->way);
-				if (tmpprev->room->used == 0)// && curway->lenway < 50)// && tmpprev->room->dist <= tmpway->room->dist)
-					ft_way_push_front(&queueways, ft_copyway(curway->way, tmpprev));
-				tmpprev = tmpprev->next;
-			}
+			tmpway->next = ft_add_step(curway, tmpprev, &queueways);
+//			tmpway->next = ft_linknew(tmpprev->room);
+//			tmpprev = tmpprev->next;
+//			while (tmpprev)
+//			{
+//				if (tmpprev->room->used == 0)
+//					ft_way_push_front(&queueways, ft_copyway(curway->way, tmpprev));
+//				tmpprev = tmpprev->next;
+//			}
 		}
 	}
 	tmpway = curway->way;

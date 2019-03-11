@@ -13,7 +13,7 @@
 //#define FILENAME "flow-thousand"
 #define FILENAME "graph1"
 
-
+int 				g_len;
 int					g_ants;
 int 				g_required;
 struct s_room		*g_graph;
@@ -67,12 +67,10 @@ void	ft_print_ways(t_way *listways);
 int		ft_isnbr(char *str);
 void	ft_print_list_links(t_link *way);
 void	ft_BFS(t_room *start);
-t_link	*ft_search_way1(t_room *exit);
 void	ft_link_insert(t_link **queue, t_link *newlink);
 int		ft_waylen(t_link *way);
 void	ft_way_insert(t_way **listway, t_way *newway);
 t_way	*ft_waynew(t_link *way);
-t_link	*ft_search_way2(t_room *exit);
 void		ft_resetgraph(t_room *graph);
 void		ft_routeaaray_insert(t_routearray **head, t_routearray *newarray);
 t_routearray	*ft_new_routearray(t_way *allways, t_way *currentway);
@@ -89,4 +87,9 @@ void	ft_del_links(t_link *list);
 t_routearray	*ft_listroutearray(t_way *allways, t_room *graph);
 t_routearray	*ft_bestroutearray(t_routearray	*arraylist);
 int ft_printmoves(t_routearray *bestarray);
+void ft_exit(void);
+int	ft_count_char(char *line, char c);
+void	ft_save_input(char *raw, char *line);
+void	ft_queue_pop(t_link **queue);
+
 #endif

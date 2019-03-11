@@ -1,4 +1,10 @@
 #include "lemin.h"
+
+void ft_exit(void)
+{
+	ft_printf("Error:wrong format farm.\n");
+	exit(3);
+}
 void	ft_print_list_links(t_link *way)
 {
 	while (way)
@@ -54,11 +60,34 @@ int ft_isnbr(char *str)
 	return 1;
 }
 
-void	ft_swap(int *a, int *b)
+int	ft_count_char(char *line, char c)
 {
-	int tmp;
+	int i;
 
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
+	i = 0;
+	while (*line)
+	{
+		if (*line == c)
+			i++;
+		line++;
+	}
+	return (i);
+}
+
+void	ft_save_input(char *raw, char *line)
+{
+	ft_strcat(raw + g_len, line);
+	g_len = g_len + (int)ft_strlen(line);
+	free(line);
+	ft_strcat(raw + g_len, "\n");
+	g_len++;
+}
+
+void	ft_queue_pop(t_link **queue)
+{
+	t_link *tmp;
+
+	tmp = *queue;
+	*queue = (*queue)->next;
+	free(tmp);
 }
