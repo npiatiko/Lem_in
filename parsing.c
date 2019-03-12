@@ -15,9 +15,11 @@ t_room	*ft_new_room(char **data, char typeroom)
 		exit(2);
 	}
 	new = (t_room *)ft_memalloc(sizeof(t_room));
-	new->name = ft_strdup(data[0]);
+	new->name = data[0];
 	new->x = ft_atoi(data[1]);
 	new->y = ft_atoi(data[2]);
+	free(data[1]);
+	free(data[2]);
 	new->type = typeroom;
 	new->dist = INT_MAX;
 	return (new);
@@ -100,7 +102,7 @@ void	ft_init_ant(char *raw)
 {
 	char *line;
 
-	while (get_next_line(0, &line) > 0)
+	while (get_next_line(fd, &line) > 0)
 	{
 		if (ft_isnbr(line) && (g_ants = ft_atoi(line)) > 0)
 		{
@@ -125,7 +127,7 @@ void ft_readroom(char *raw, char **line)
 	char	typeroom;
 
 	typeroom = 'n';
-	while (get_next_line(0, line) > 0)
+	while (get_next_line(fd, line) > 0)
 		if ((*line)[0] == '#')
 			ft_readcomments(*line, &typeroom, raw);
 		else if (ft_count_char(*line, ' ') == 2)
@@ -162,12 +164,14 @@ void	ft_readlink(char *raw, char **line)
 			if (!words[0] || !words[1])
 				ft_exit();
 			ft_neighbour_add(g_graph, words);
+			free(words[0]);
+			free(words[1]);
 			free(words);
 			ft_save_input(raw, *line);
 		}
 		else
 			ft_exit();
-		if (get_next_line(0, line) <= 0)
+		if (get_next_line(fd, line) <= 0)
 			break;
 	}
 }
@@ -190,5 +194,6 @@ t_room *ft_parsing(void)
 		ft_exit();
 	ft_readlink(raw, &line);
 	write(1, raw, (size_t)g_len);
+	free(raw);
 	return (g_graph);
 }

@@ -69,7 +69,7 @@ t_link	*ft_search_uprev(t_link *tmpprev)
 	return (tmpprev);
 }
 
-t_link	*ft_add_step(t_way *curway, t_link *tmpprev, t_way **queueways)
+t_link	*ft_add_step(t_link *curway, t_link *tmpprev, t_way **queueways)
 {
 	t_link *newstep;
 
@@ -78,61 +78,56 @@ t_link	*ft_add_step(t_way *curway, t_link *tmpprev, t_way **queueways)
 	while (tmpprev)
 	{
 		if (tmpprev->room->used == 0)
-			ft_way_push_front(queueways, ft_copyway(curway->way, tmpprev));
+			ft_way_push_front(queueways, ft_copyway(curway, tmpprev));
 		tmpprev = tmpprev->next;
 	}
 	return (newstep);
 }
-t_link *ft_search_way3(t_room *exit, t_room *graph)
+
+t_way	*ft_kos(t_link **tmpway, t_way **curway, t_way **queueways, t_link **tmpprev)
+{
+	int	i;
+
+	i = 0;
+	while ((*tmpway)->room->type != 's')
+	{
+		(*tmpway)->room->used = 1;
+		if ((*tmpway)->next)
+			(*tmpway) = (*tmpway)->next;
+		else
+		if (!(*tmpprev = ft_search_uprev((*tmpway)->room->prev)))
+			if (*queueways)
+			{
+				ft_del_way(*curway);
+				if (i++ > 1000)
+					return ((t_way *)5);
+				*curway = ft_way_pop(queueways, tmpway);
+				continue;
+			}
+			else
+				return NULL;
+		else
+			(*tmpway)->next = ft_add_step((*curway)->way, *tmpprev, queueways);
+	}
+	return (*curway);
+}
+
+t_link *ft_search_way3(t_room *exit)
 {
 	static t_way *queueways = (t_way *) 1;
 	t_link	*tmpway;
 	t_way	*curway;
 	t_link	*tmpprev;
-	int 	i = 0;
 
 	if (!queueways)
 		return NULL;
 	if (queueways == (t_way *) 1)
 		queueways = ft_waynew(ft_linknew(exit));
-	ft_resetgraph(graph);
-	curway = ft_way_pop(&queueways);
-	tmpway = curway->way;
-	while (tmpway->room->type != 's')
-	{
-		tmpway->room->used = 1;
-		if (tmpway->next)
-			tmpway = tmpway->next;
-		else
-		{
-			tmpprev = ft_search_uprev(tmpway->room->prev);
-			if (tmpprev == NULL)
-			{
-				if (queueways)
-				{
-					ft_del_way(curway);
-					if (i++ > 1000)
-						return ((t_link *)5);
-					ft_resetgraph(graph);
-					curway = ft_way_pop(&queueways);
-					tmpway = curway->way;
-					continue;
-				}
-				else
-					return NULL;
-			}
-			tmpway->next = ft_add_step(curway, tmpprev, &queueways);
-//			tmpway->next = ft_linknew(tmpprev->room);
-//			tmpprev = tmpprev->next;
-//			while (tmpprev)
-//			{
-//				if (tmpprev->room->used == 0)
-//					ft_way_push_front(&queueways, ft_copyway(curway->way, tmpprev));
-//				tmpprev = tmpprev->next;
-//			}
-		}
-	}
-	tmpway = curway->way;
+	curway = ft_way_pop(&queueways, &tmpway);
+	curway = ft_kos(&tmpway, &curway, &queueways, &tmpprev);
+	if (curway == (t_way *)5)
+		return ((t_link *)5);
+	tmpway = curway ? curway->way : NULL;
 	free(curway);
 	return (tmpway);
 }

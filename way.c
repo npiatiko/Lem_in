@@ -33,7 +33,7 @@ t_way	*ft_copyway(t_link *source, t_link *newlink)
 	newway = ft_waynew(NULL);
 	newway->way = ft_linknew(source->room);
 	tmp = newway->way;
-	while (source->next->next)
+	while (source->next)
 	{
 		source = source->next;
 		tmp->next = ft_linknew(source->room);
@@ -48,15 +48,17 @@ void	ft_way_push_front(t_way **listway, t_way *newway)
 	*listway = newway;
 }
 
-t_way	*ft_way_pop(t_way **listway)
+t_way *ft_way_pop(t_way **listway, t_link **tmpway)
 {
 	t_way *way;
 
 	if (*listway)
 	{
+		ft_resetgraph(g_graph);
 		way = *listway;
 		*listway = (*listway)->next_way;
 		way->next_way = NULL;
+		*tmpway = way->way;
 	}
 	else
 		way = NULL;

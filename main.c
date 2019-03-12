@@ -6,7 +6,7 @@ t_way *ft_search_way(t_room *graph)
 
 	allways = NULL;
 	ft_BFS(g_start);
-	while ((way = ft_search_way3(g_exit, graph)))
+	while ((way = ft_search_way3(g_exit)))
 	{
 		if (way == (t_link *)5)
 			break ;
@@ -36,6 +36,8 @@ int main()
 	t_routearray	*arraylist;
 	int iter;
 
+//	fd = open(FILENAME, O_RDONLY);
+fd = 0;
 	graph = ft_parsing();
 	allways = ft_search_way(graph);
 	arraylist = ft_listroutearray(allways, graph);
@@ -44,7 +46,7 @@ int main()
 	ft_printf("g_start = %s\n", g_start->name);
 	ft_printf("g_exit = %s\n", g_exit->name);
 	ft_printf("%d\n", g_ants);
-
+	system("leaks -q Lem_in");
 	return 0;
 }
 
