@@ -193,7 +193,7 @@ t_room *ft_parsing(void)
 	if (!g_start || !g_exit || !g_graph || !g_ants)
 		ft_exit();
 	ft_readlink(raw, &line);
-	write(1, raw, (size_t)g_len);
+//	write(1, raw, (size_t)g_len);
 	free(raw);
 	return (g_graph);
 }

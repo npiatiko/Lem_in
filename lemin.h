@@ -37,6 +37,8 @@ typedef struct		s_room
 
 typedef	struct		s_link
 {
+	char test[100];
+
 	char 			used;
 	struct s_room	*room;
 	struct s_link	*next;

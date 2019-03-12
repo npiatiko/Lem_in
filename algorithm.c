@@ -148,5 +148,6 @@ t_link *ft_search_way_BFS2(t_room *exit)
 	}
 	if ((exit->type == 's' && cur->room->type == 'e') || (exit->type == 'e' && cur->room->type == 's'))
 		return (way);
+	ft_del_links(way);
 	return NULL;
 }

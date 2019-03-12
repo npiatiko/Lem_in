@@ -5,6 +5,7 @@ void ft_exit(void)
 	ft_printf("Error:wrong format farm.\n");
 	exit(3);
 }
+
 void	ft_print_list_links(t_link *way)
 {
 	while (way)

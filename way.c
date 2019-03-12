@@ -42,6 +42,7 @@ t_way	*ft_copyway(t_link *source, t_link *newlink)
 	tmp->next = ft_linknew(newlink->room);
 	return (newway);
 }
+
 void	ft_way_push_front(t_way **listway, t_way *newway)
 {
 	newway->next_way = *listway;
