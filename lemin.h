@@ -37,9 +37,6 @@ typedef struct		s_room
 
 typedef	struct		s_link
 {
-	char test[100];
-
-	char 			used;
 	struct s_room	*room;
 	struct s_link	*next;
 }					t_link;
@@ -56,7 +53,6 @@ typedef	struct		s_routearray
 {
 	struct s_way		*way;
 	struct s_routearray	*next_array;
-	int					lenway;
 }					t_routearray;
 
 t_room *ft_parsing();
@@ -69,7 +65,7 @@ void	ft_print_graph(t_room *head);
 void	ft_print_ways(t_way *listways);
 int		ft_isnbr(char *str);
 void	ft_print_list_links(t_link *way);
-void	ft_BFS(t_room *start);
+void	ft_bfs(t_room *start);
 void	ft_link_insert(t_link **queue, t_link *newlink);
 int		ft_waylen(t_link *way);
 void	ft_way_insert(t_way **listway, t_way *newway);
@@ -82,9 +78,9 @@ t_way *ft_way_pop(t_way **listway, t_link **tmpway);
 t_link *ft_search_way3(t_room *exit);
 void	ft_way_push_front(t_way **listway, t_way *newway);
 t_way	*ft_copyway(t_link *source, t_link *newlink);
-void ft_BFS2(t_room *start);
-t_link *ft_search_way_BFS2(t_room *exit);
-void	ft_resetdist(t_room *graph);
+void ft_bfs2(t_room *start);
+t_link *ft_search_way_bfs2(t_room *exit);
+t_link	*ft_resetdist(t_room *graph, t_room *start);
 void	ft_del_way(t_way *way);
 void	ft_del_links(t_link *list);
 t_routearray	*ft_listroutearray(t_way *allways, t_room *graph);

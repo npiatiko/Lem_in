@@ -63,7 +63,6 @@ t_link	*ft_linknew(t_room *room)
 		return (NULL);
 	newlink->room = room;
 	newlink->next = NULL;
-	newlink->used = 0;
 	return (newlink);
 }
 

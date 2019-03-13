@@ -9,15 +9,16 @@ void	ft_resetgraph(t_room *graph)
 	}
 }
 
-void	ft_resetdist(t_room *graph)
+t_link	*ft_resetdist(t_room *graph, t_room *start)
 {
 	while (graph)
 	{
-		graph->dist = INT_MAX;
+		graph->dist = graph->type == 's' ? 0 : INT_MAX;
 		ft_del_links(graph->prev);
 		graph->prev = NULL;
 		graph = graph->next;
 	}
+	return (ft_linknew(start));
 }
 
 void	ft_visitroom(t_way *way)
