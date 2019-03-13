@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   way.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: npiatiko <npiatiko@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/13 15:35:57 by npiatiko          #+#    #+#             */
+/*   Updated: 2019/03/13 15:35:58 by npiatiko         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lemin.h"
 
 int		ft_waylen(t_link *way)
@@ -43,13 +55,7 @@ t_way	*ft_copyway(t_link *source, t_link *newlink)
 	return (newway);
 }
 
-void	ft_way_push_front(t_way **listway, t_way *newway)
-{
-	newway->next_way = *listway;
-	*listway = newway;
-}
-
-t_way *ft_way_pop(t_way **listway, t_link **tmpway)
+t_way	*ft_way_pop(t_way **listway, t_link **tmpway)
 {
 	t_way *way;
 
@@ -63,7 +69,7 @@ t_way *ft_way_pop(t_way **listway, t_link **tmpway)
 	}
 	else
 		way = NULL;
-	return way;
+	return (way);
 }
 
 void	ft_way_insert(t_way **listway, t_way *newway)
@@ -79,7 +85,7 @@ void	ft_way_insert(t_way **listway, t_way *newway)
 	while (prev->next_way)
 	{
 		if (newway->lenway <= tmp->lenway)
-			break;
+			break ;
 		prev = tmp;
 		tmp = tmp->next_way;
 	}
@@ -87,29 +93,4 @@ void	ft_way_insert(t_way **listway, t_way *newway)
 	newway->next_way = tmp;
 	*listway = head->next_way;
 	free(head);
-}
-
-void	ft_del_links(t_link *list)
-{
-	t_link *tmp;
-
-	while (list)
-	{
-		tmp = list;
-		list = list->next;
-		free(tmp);
-	}
-}
-
-void	ft_del_way(t_way *way)
-{
-	t_way *tmp;
-
-	while (way)
-	{
-		tmp = way;
-		way = way->next_way;
-		ft_del_links(tmp->way);
-		free(tmp);
-	}
 }

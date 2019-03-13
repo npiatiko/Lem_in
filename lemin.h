@@ -90,5 +90,7 @@ void ft_exit(void);
 int	ft_count_char(char *line, char c);
 void	ft_save_input(char *raw, char *line);
 void	ft_queue_pop(t_link **queue);
-
+void			ft_visitroom(t_way *way);
+int				ft_routecheck(t_way *way);
+int		ft_itercounter(t_routearray *arraylist);
 #endif

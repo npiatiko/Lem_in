@@ -1,8 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: npiatiko <npiatiko@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/13 15:28:48 by npiatiko          #+#    #+#             */
+/*   Updated: 2019/03/13 15:28:48 by npiatiko         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lemin.h"
-t_way *ft_search_way(t_room *graph)
+
+t_way	*ft_search_way(t_room *graph)
 {
 	t_way	*allways;
-	t_link		*way;
+	t_link	*way;
 
 	allways = NULL;
 	ft_bfs(g_start);
@@ -27,25 +40,24 @@ t_way *ft_search_way(t_room *graph)
 	return (allways);
 }
 
-int main()
+int		main(void)
 {
-	t_room		*graph;
-	t_way		*allways;
+	t_room			*graph;
+	t_way			*allways;
 	t_routearray	*arraylist;
-	int iter;
+	int				iter;
 
-//	fd = open(FILENAME, O_RDONLY);
 	fd = 0;
 	graph = ft_parsing();
 	allways = ft_search_way(graph);
-
+//	ft_print_ways(allways);
 	arraylist = ft_listroutearray(allways, graph);
+	ft_print_ways(ft_bestroutearray(arraylist)->way);
 	iter = ft_printmoves(ft_bestroutearray(arraylist));
 	system("leaks -q Lem_in");
-	ft_printf("my iter = %d   required = %d\n",iter, g_required);
+	ft_printf("my iter = %d   required = %d\n", iter, g_required);
 	ft_printf("g_start = %s\n", g_start->name);
 	ft_printf("g_exit = %s\n", g_exit->name);
 	ft_printf("%d\n", g_ants);
-
-	return 0;
+	return (0);
 }

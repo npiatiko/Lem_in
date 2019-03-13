@@ -50,17 +50,6 @@ void	ft_print_ways(t_way *listways)
 
 }
 
-int ft_isnbr(char *str)
-{
-	while (*str)
-	{
-		if (!ft_isdigit(*str))
-			return (0);
-		str++;
-	}
-	return 1;
-}
-
 int	ft_count_char(char *line, char c)
 {
 	int i;
@@ -73,22 +62,4 @@ int	ft_count_char(char *line, char c)
 		line++;
 	}
 	return (i);
-}
-
-void	ft_save_input(char *raw, char *line)
-{
-	ft_strcat(raw + g_len, line);
-	g_len = g_len + (int)ft_strlen(line);
-	free(line);
-	ft_strcat(raw + g_len, "\n");
-	g_len++;
-}
-
-void	ft_queue_pop(t_link **queue)
-{
-	t_link *tmp;
-
-	tmp = *queue;
-	*queue = (*queue)->next;
-	free(tmp);
 }

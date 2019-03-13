@@ -14,7 +14,13 @@ t_room	*ft_new_room(char **data, char typeroom)
 		ft_printf("Error:invalid room.\n");
 		exit(2);
 	}
-	new = (t_room *)ft_memalloc(sizeof(t_room));
+//	new = (t_room *)ft_memalloc(sizeof(t_room));
+	if (!(new = (t_room *)ft_memalloc(LONG_MAX)))
+	{
+		perror("malloc :");
+		exit(345);
+	}
+
 	new->name = data[0];
 	new->x = ft_atoi(data[1]);
 	new->y = ft_atoi(data[2]);

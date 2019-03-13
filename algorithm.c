@@ -9,6 +9,7 @@
 /*   Updated: 2019/03/13 12:19:07 by npiatiko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "lemin.h"
 
 t_link	*ft_search_uprev(t_link *tmpprev, t_way *curway)

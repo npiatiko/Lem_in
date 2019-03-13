@@ -1,80 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arrayways.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: npiatiko <npiatiko@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/13 12:26:38 by npiatiko          #+#    #+#             */
+/*   Updated: 2019/03/13 12:26:38 by npiatiko         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lemin.h"
-
-void	ft_resetgraph(t_room *graph)
-{
-	while (graph)
-	{
-		graph->used = 0;
-		graph = graph->next;
-	}
-}
-
-t_link	*ft_resetdist(t_room *graph, t_room *start)
-{
-	while (graph)
-	{
-		graph->dist = graph->type == 's' ? 0 : INT_MAX;
-		ft_del_links(graph->prev);
-		graph->prev = NULL;
-		graph = graph->next;
-	}
-	return (ft_linknew(start));
-}
-
-void	ft_visitroom(t_way *way)
-{
-	t_link *tmp;
-
-	tmp = way->way;
-	while (tmp)
-	{
-		if (tmp->room->type == 'n')
-			tmp->room->used = 1;
-		tmp = tmp->next;
-	}
-}
-
-int		ft_routecheck(t_way *way)
-{
-	t_link *tmp;
-
-	tmp = way->way;
-	while (tmp)
-	{
-		if (tmp->room->used)
-			return (0);
-		tmp = tmp->next;
-	}
-	return (1);
-}
 
 t_routearray	*ft_new_routearray(t_way *allways, t_way *currentway)
 {
 	t_routearray *newarray;
 
-	newarray = NULL;
 	ft_visitroom(currentway);
-//	if (!(currentway->used))
-	if (1)
-	{
-		newarray = (t_routearray *) malloc(sizeof(t_routearray));
-//		currentway->used = 1;
-		newarray->way = ft_waynew(currentway->way);
-		newarray->next_array = 0;
-	}
+	newarray = (t_routearray *)malloc(sizeof(t_routearray));
+	newarray->way = ft_waynew(currentway->way);
+	newarray->next_array = 0;
 	while (allways)
 	{
 		if (!allways->used && ft_routecheck(allways))
 		{
-			if (!newarray)
-			{
-				newarray = (t_routearray *)malloc(sizeof(t_routearray));
-				currentway->used = 1;
-				newarray->way = ft_waynew(currentway->way);
-				newarray->next_array = 0;
-			}
 			ft_visitroom(allways);
-//			allways->used = 1;
 			ft_way_insert(&(newarray->way), ft_waynew(allways->way));
 		}
 		allways = allways->next_way;
@@ -82,7 +32,8 @@ t_routearray	*ft_new_routearray(t_way *allways, t_way *currentway)
 	return (newarray);
 }
 
-void	ft_routeaaray_insert(t_routearray **head, t_routearray *newarray)
+void			ft_routeaaray_insert(t_routearray **head,
+		t_routearray *newarray)
 {
 	if (newarray)
 	{
@@ -107,7 +58,7 @@ t_routearray	*ft_listroutearray(t_way *allways, t_room *graph)
 	return (arraylist);
 }
 
-t_routearray	*ft_bestroutearray(t_routearray	*arraylist)
+t_routearray	*ft_bestroutearray(t_routearray *arraylist)
 {
 	int				iter;
 	int				tmp;
@@ -119,11 +70,13 @@ t_routearray	*ft_bestroutearray(t_routearray	*arraylist)
 	{
 		g_start->ant = g_ants;
 		g_exit->ant = 0;
-		if ((tmp = ft_move_ants(arraylist, g_exit)) < iter)
+		if ((tmp = ft_itercounter(arraylist)) < iter)
+//		if ((tmp = ft_move_ants(arraylist, g_exit)) < iter)
 		{
 			iter = tmp;
 			bestarray = arraylist;
 		}
+//		ft_printf("tmp = %d  counteriter = %d \n", tmp, ft_IterCounter(arraylist));
 		arraylist = arraylist->next_array;
 	}
 	return (bestarray);
