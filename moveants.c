@@ -31,7 +31,7 @@ void	ft_moveant(t_link *curway, int expression)
 {
 	if (curway->room->type == 'e' && curway->next->room->ant)
 	{
-		ft_printf("L%03d-%s ", curway->next->room->ant, curway->room->name);
+		ft_print_move(curway->next->room->ant, curway->room);
 		curway->room->ant++;
 		curway->next->room->ant = 0;
 	}
@@ -40,14 +40,14 @@ void	ft_moveant(t_link *curway, int expression)
 		if (curway->next->room->ant > expression)
 		{
 			curway->room->ant = curway->next->room->ant;
-			ft_printf("L%03d-%s ", curway->room->ant, curway->room->name);
+			ft_print_move(curway->room->ant, curway->room);
 			curway->next->room->ant--;
 		}
 	}
 	else if (curway->next->room->ant)
 	{
 		curway->room->ant = curway->next->room->ant;
-		ft_printf("L%03d-%s ", curway->room->ant, curway->room->name);
+		ft_print_move(curway->room->ant, curway->room);
 		curway->next->room->ant = 0;
 	}
 }
@@ -58,7 +58,7 @@ void	ft_print_moveant(t_link *curway, int expression)
 	{
 		if (curway->room->type == 'e' && curway->next->room->type == 's')
 		{
-			ft_printf("L%03d-%s ", curway->next->room->ant, curway->room->name);
+			ft_print_move(curway->next->room->ant, curway->room);
 			g_start->ant--;
 			g_exit->ant++;
 			continue;
@@ -118,7 +118,7 @@ int		ft_printmoves(t_routearray *bestarray)
 			ft_print_moveant(curway, expression);
 			curlistway = curlistway->next_way;
 		}
-		ft_printf("\n");
+		ft_printf("\033[m\n");
 	}
 	return (i);
 }

@@ -25,6 +25,7 @@ int					g_required;
 struct s_room		*g_graph;
 struct s_room		*g_start;
 struct s_room		*g_exit;
+char				g_params[10];
 
 typedef struct		s_room
 {
@@ -65,7 +66,6 @@ void			ft_link_push_front(t_link **queue, t_link *newlink);
 t_link			*ft_link_pop(t_link **queue);
 t_link			*ft_linknew(t_room *room);
 void			ft_link_push_back(t_link **queue, t_link *newlink);
-void			ft_print_graph(t_room *head);
 void			ft_print_ways(t_way *listways);
 int				ft_isnbr(char *str);
 void			ft_print_list_links(t_link *way);
@@ -78,7 +78,6 @@ void			ft_resetgraph(t_room *graph);
 void			ft_routeaaray_insert(t_routearray **head,
 		t_routearray *newarray);
 t_routearray	*ft_new_routearray(t_way *allways, t_way *currentway);
-int				ft_move_ants(t_routearray *arraylist, t_room *exit);
 t_way			*ft_way_pop(t_way **listway, t_link **tmpway);
 t_link			*ft_search_way3(t_room *exit);
 void			ft_way_push_front(t_way **listway, t_way *newway);
@@ -100,4 +99,5 @@ int				ft_routecheck(t_way *way);
 int				ft_itercounter(t_routearray *arraylist);
 void			ft_readroom(char *raw, char **line);
 void			ft_readcomments(char *line, char *typeroom, char *raw);
+void			ft_print_move(int ant, t_room *room);
 #endif

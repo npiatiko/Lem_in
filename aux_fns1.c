@@ -14,7 +14,15 @@
 
 void	ft_exit(char *errormsg, int errn)
 {
-	ft_printf("\033[31mError: %s\033[38m\n", errormsg);
+	if (ft_strchr(g_params, 'c') && ft_strchr(g_params, 'e'))
+		ft_printf("\033[38;05;196mError: %s\033[38m\n", errormsg);
+	else if (ft_strchr(g_params, 'c'))
+		ft_printf("\033[38;05;196mError.\033[38m\n", errormsg);
+	else if (ft_strchr(g_params, 'e'))
+		ft_printf("Error: %s\n", errormsg);
+	else
+		ft_printf("Error.\n");
+
 	exit(errn);
 }
 
@@ -22,27 +30,25 @@ void	ft_print_list_links(t_link *way)
 {
 	while (way)
 	{
-		ft_printf("%s", way->room->name);
+		if (ft_strchr(g_params, 'c'))
+		{
+			if (way->room->type == 's')
+				ft_printf("\033[38;05;46m%s", way->room->name);
+			else if (way->room->type == 'e')
+				ft_printf("\033[38;05;21m%s", way->room->name);
+			else
+				ft_printf("\033[38;05;226m%s", way->room->name);
+		}
+		else
+			ft_printf("%s", way->room->name);
 		way = way->next;
 		if (way)
-			ft_printf(" -> ");
-	}
-}
-
-void	ft_print_graph(t_room *head)
-{
-	while (head)
-	{
-		ft_printf("room name :%s, %c, dist = %d, used = %d",
-				head->name, head->type, head->dist, head->used);
-		if (head->links)
-			ft_printf(" links to: ");
-		ft_print_list_links(head->links);
-		if (head->prev)
-			ft_printf(" prev: ");
-		ft_print_list_links(head->prev);
-		ft_printf("\n");
-		head = head->next;
+		{
+			if (ft_strchr(g_params, 'c'))
+				ft_printf("\033[38;05;226m <- ");
+			else
+				ft_printf("\033[m <- ");
+		}
 	}
 }
 
@@ -51,12 +57,15 @@ void	ft_print_ways(t_way *listways)
 	ft_printf("\n");
 	while (listways)
 	{
-		ft_printf("way len = %d : ", listways->lenway);
+		if (ft_strchr(g_params, 'c'))
+			ft_printf("\033[38;05;15mway len = %d : ", listways->lenway);
+		else
+			ft_printf("way len = %d : ", listways->lenway);
 		ft_print_list_links(listways->way);
 		ft_printf("\n");
 		listways = listways->next_way;
 	}
-	ft_printf("\n");
+	ft_printf("\033[m\n");
 }
 
 int		ft_count_char(char *line, char c)
