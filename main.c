@@ -12,7 +12,7 @@
 
 #include "lemin.h"
 
-void ft_print_move(int ant, t_room *room)
+void	ft_print_move(int ant, t_room *room)
 {
 	if (ft_strchr(g_params, 'c'))
 	{

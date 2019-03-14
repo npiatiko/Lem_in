@@ -22,7 +22,6 @@ void	ft_exit(char *errormsg, int errn)
 		ft_printf("Error: %s\n", errormsg);
 	else
 		ft_printf("Error.\n");
-
 	exit(errn);
 }
 

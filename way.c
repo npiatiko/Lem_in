@@ -14,7 +14,7 @@
 
 int		ft_waylen(t_link *way)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	while (way)
