@@ -47,7 +47,6 @@ int		main(int ac, char **av)
 	char			*input;
 	int				iter;
 
-	fd = 0;
 	input = ft_parsing();
 	if (!(allways = ft_search_way(g_graph)))
 		ft_exit("ways not found.", 56);

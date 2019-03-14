@@ -55,7 +55,7 @@ void	ft_readroom(char *raw, char **line)
 	char	typeroom;
 
 	typeroom = 'n';
-	while (get_next_line(fd, line) > 0)
+	while (get_next_line(0, line) > 0)
 		if (**line == '#')
 			ft_readcomments(*line, &typeroom, raw);
 		else if (ft_count_char(*line, ' ') == 2)

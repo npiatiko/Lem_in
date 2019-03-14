@@ -65,7 +65,7 @@ void	ft_init_ant(char *raw)
 {
 	char *line;
 
-	while (get_next_line(fd, &line) > 0)
+	while (get_next_line(0, &line) > 0)
 	{
 		if (ft_isnbr(line) && (g_ants = ft_atoi(line)) > 0)
 		{
@@ -107,7 +107,7 @@ void	ft_readlink(char *raw, char **line)
 		}
 		else
 			ft_exit("wrong format farm.", 1);
-		if (get_next_line(fd, line) <= 0)
+		if (get_next_line(0, line) <= 0)
 			break ;
 	}
 }
