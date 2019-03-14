@@ -29,7 +29,8 @@ t_way	*ft_waynew(t_link *way)
 {
 	t_way *newway;
 
-	newway = malloc(sizeof(t_way));
+	if (!(newway = (t_way *)malloc(sizeof(t_way))))
+		ft_exit(strerror(errno), errno);
 	newway->used = 0;
 	newway->way = way;
 	newway->lenway = ft_waylen(way) - 1;
@@ -78,7 +79,8 @@ void	ft_way_insert(t_way **listway, t_way *newway)
 	t_way *tmp;
 	t_way *prev;
 
-	head = (t_way*)malloc(sizeof(t_way));
+	if (!(head = (t_way*)malloc(sizeof(t_way))))
+		ft_exit(strerror(errno), errno);
 	head->next_way = *listway;
 	prev = head;
 	tmp = head->next_way;

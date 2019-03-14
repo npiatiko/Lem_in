@@ -17,7 +17,8 @@ t_routearray	*ft_new_routearray(t_way *allways, t_way *currentway)
 	t_routearray *newarray;
 
 	ft_visitroom(currentway);
-	newarray = (t_routearray *)malloc(sizeof(t_routearray));
+	if(!(newarray = (t_routearray *)malloc(sizeof(t_routearray))))
+		ft_exit(strerror(errno), errno);
 	newarray->way = ft_waynew(currentway->way);
 	newarray->next_array = 0;
 	while (allways)
@@ -71,12 +72,10 @@ t_routearray	*ft_bestroutearray(t_routearray *arraylist)
 		g_start->ant = g_ants;
 		g_exit->ant = 0;
 		if ((tmp = ft_itercounter(arraylist)) < iter)
-//		if ((tmp = ft_move_ants(arraylist, g_exit)) < iter)
 		{
 			iter = tmp;
 			bestarray = arraylist;
 		}
-//		ft_printf("tmp = %d  counteriter = %d \n", tmp, ft_IterCounter(arraylist));
 		arraylist = arraylist->next_array;
 	}
 	return (bestarray);

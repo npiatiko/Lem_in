@@ -1,9 +1,9 @@
 #include "lemin.h"
 
-void ft_exit(void)
+void ft_exit(char *errormsg, int errn)
 {
-	ft_printf("Error:wrong format farm.\n");
-	exit(3);
+	ft_printf("\033[31mError: %s\033[38m\n", errormsg);
+	exit(errn);
 }
 
 void	ft_print_list_links(t_link *way)

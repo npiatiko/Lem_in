@@ -4,6 +4,8 @@
 #include "./libft/libft.h"
 #include <limits.h>
 #include <stdio.h>
+#include <string.h>
+#include <errno.h>
 
 //#define FILENAME "big-superposition"
 //#define FILENAME "big_s.txt"
@@ -11,7 +13,7 @@
 //#define FILENAME "flow-one"
 //#define FILENAME "flow-ten"
 //#define FILENAME "flow-thousand"
-//#define FILENAME "graph1"
+#define FILENAME "graph1"
 
 int 				g_len;
 int					g_ants;
@@ -55,7 +57,7 @@ typedef	struct		s_routearray
 	struct s_routearray	*next_array;
 }					t_routearray;
 
-t_room *ft_parsing();
+char * ft_parsing();
 void	ft_link_push_front(t_link **queue, t_link *newlink);
 t_link	*ft_link_pop(t_link **queue);
 t_link	*ft_linknew(t_room *room);
@@ -86,7 +88,7 @@ void	ft_del_links(t_link *list);
 t_routearray	*ft_listroutearray(t_way *allways, t_room *graph);
 t_routearray	*ft_bestroutearray(t_routearray	*arraylist);
 int ft_printmoves(t_routearray *bestarray);
-void ft_exit(void);
+void ft_exit(char *errormsg, int errn);
 int	ft_count_char(char *line, char c);
 void	ft_save_input(char *raw, char *line);
 void	ft_queue_pop(t_link **queue);

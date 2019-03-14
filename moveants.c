@@ -27,6 +27,30 @@ int		ft_calc_expr(t_way *pway, t_link *plink)
 	return (exp);
 }
 
+void	ft_moveant(t_link *curway, int expression)
+{
+	if (curway->room->type == 'e' && curway->next->room->ant)
+	{
+		ft_printf("L%03d-%s ", curway->next->room->ant, curway->room->name);
+		curway->room->ant++;
+		curway->next->room->ant = 0;
+	}
+	else if (curway->next->room->type == 's' && curway->next->room->ant)
+	{
+		if (curway->next->room->ant > expression)
+		{
+			curway->room->ant = curway->next->room->ant;
+			ft_printf("L%03d-%s ", curway->room->ant, curway->room->name);
+			curway->next->room->ant--;
+		}
+	}
+	else if (curway->next->room->ant)
+	{
+		curway->room->ant = curway->next->room->ant;
+		ft_printf("L%03d-%s ", curway->room->ant, curway->room->name);
+		curway->next->room->ant = 0;
+	}
+}
 void	ft_print_moveant(t_link *curway, int expression)
 {
 	while (curway->next && g_exit->ant != g_ants)
@@ -38,27 +62,8 @@ void	ft_print_moveant(t_link *curway, int expression)
 			g_exit->ant++;
 			continue;
 		}
-		else if (curway->room->type == 'e' && curway->next->room->ant)
-		{
-			ft_printf("L%03d-%s ", curway->next->room->ant, curway->room->name);
-			curway->room->ant++;
-			curway->next->room->ant = 0;
-		}
-		else if (curway->next->room->type == 's' && curway->next->room->ant)
-		{
-			if (curway->next->room->ant > expression)
-			{
-				curway->room->ant = curway->next->room->ant;
-				ft_printf("L%03d-%s ", curway->room->ant, curway->room->name);
-				curway->next->room->ant--;
-			}
-		}
-		else if (curway->next->room->ant)
-		{
-			curway->room->ant = curway->next->room->ant;
-			ft_printf("L%03d-%s ", curway->room->ant, curway->room->name);
-			curway->next->room->ant = 0;
-		}
+		else
+			ft_moveant(curway, expression);
 		curway = curway->next;
 	}
 }

@@ -5,22 +5,11 @@ t_room	*ft_new_room(char **data, char typeroom)
 	t_room	*new;
 
 	if (!data[0] || !data[1] || !data[2])
-	{
-		ft_printf("Error:invalid room.\n");
-		exit(2);
-	}
+		ft_exit("invalid room.", 2);
 	if (data[3] || !ft_isnbr(data[1]) || !ft_isnbr(data[2]) || data[0][0] == 'L')
-	{
-		ft_printf("Error:invalid room.\n");
-		exit(2);
-	}
-//	new = (t_room *)ft_memalloc(sizeof(t_room));
-	if (!(new = (t_room *)ft_memalloc(LONG_MAX)))
-	{
-		perror("malloc :");
-		exit(345);
-	}
-
+		ft_exit("invalid room.", 2);
+	if (!(new = (t_room *)ft_memalloc(sizeof(t_room))))
+		ft_exit(strerror(errno), errno);
 	new->name = data[0];
 	new->x = ft_atoi(data[1]);
 	new->y = ft_atoi(data[2]);
@@ -39,10 +28,7 @@ void	ft_room_add(t_room **head, t_room *new)
 	while (tmp)
 	{
 		if (ft_strequ(new->name, tmp->name) || (new->x == tmp->x && new->y == tmp->y))
-		{
-			ft_printf("Error:invalid room.\n");
-			exit(2);
-		}
+			ft_exit("invalid room.", 2);
 		tmp = tmp->next;
 	}
 	new->next = *head;
@@ -57,23 +43,21 @@ void ft_neighbour_add(t_room *graph, char **data)
 	while (graph)
 	{
 		if(ft_strequ(graph->name, data[0]))
-		{
 			while (tmp)
 			{
 				if (ft_strequ(tmp->name, data[1]))
 				{
-
-					ft_link_push_front(&(graph->links), ft_linknew(tmp));
-					ft_link_push_front(&(tmp->links), ft_linknew(graph));
+					if (graph->type != 'l')
+						ft_link_push_front(&(graph->links), ft_linknew(tmp));
+					if (tmp->type != 'l')
+						ft_link_push_front(&(tmp->links), ft_linknew(graph));
 					return;
 				}
 				tmp = tmp->next;
 			}
-		}
 		graph = graph->next;
 	}
-	ft_printf("Error:wrong link.\n");
-	exit(1);
+	ft_exit("wrong link.", 1);
 }
 
 void 	ft_readcomments(char *line, char *typeroom, char *raw)
@@ -81,11 +65,8 @@ void 	ft_readcomments(char *line, char *typeroom, char *raw)
 	static int counts = 0;
 	static int counte = 0;
 
-	if (line[1] != '#')
-	{
-		if (ft_strcmp(line, "#Here is the number of lines required: "))
-			g_required = ft_atoi(line + 38);
-	}
+	if (ft_strstr(line, "#Here is the number of lines required: "))
+		g_required = ft_atoi(line + 38);
 	if (ft_strequ(line, "##start"))
 	{
 		*typeroom = 's';
@@ -96,11 +77,10 @@ void 	ft_readcomments(char *line, char *typeroom, char *raw)
 		*typeroom = 'e';
 		counte++;
 	}
+	if (ft_strequ(line, "##lock"))
+		*typeroom = 'l';
 	if (counte > 1 || counts > 1)
-	{
-		ft_printf("Error:wrong number of start/end rooms.\n");
-		exit(4);
-	}
+		ft_exit("wrong number of start/end rooms.", 4);
 	ft_save_input(raw, line);
 }
 
@@ -121,12 +101,12 @@ void	ft_init_ant(char *raw)
 		}
 		else
 		{
-			ft_printf("Error:wrong number of ants.\n");
 			free(line);
-			exit(6);
+			ft_exit("wrong number of ants.", 6);
 		}
 	}
 }
+
 void ft_readroom(char *raw, char **line)
 {
 	char	**words;
@@ -134,7 +114,7 @@ void ft_readroom(char *raw, char **line)
 
 	typeroom = 'n';
 	while (get_next_line(fd, line) > 0)
-		if ((*line)[0] == '#')
+		if (**line == '#')
 			ft_readcomments(*line, &typeroom, raw);
 		else if (ft_count_char(*line, ' ') == 2)
 		{
@@ -151,7 +131,7 @@ void ft_readroom(char *raw, char **line)
 		else if (ft_count_char(*line, '-') == 1)
 			return;
 		else
-			ft_exit();
+			ft_exit("wrong format farm.", 1);
 }
 
 void	ft_readlink(char *raw, char **line)
@@ -168,7 +148,7 @@ void	ft_readlink(char *raw, char **line)
 		{
 			words = ft_strsplit(*line, '-');
 			if (!words[0] || !words[1])
-				ft_exit();
+				ft_exit("wrong format farm.", 1);
 			ft_neighbour_add(g_graph, words);
 			free(words[0]);
 			free(words[1]);
@@ -176,13 +156,13 @@ void	ft_readlink(char *raw, char **line)
 			ft_save_input(raw, *line);
 		}
 		else
-			ft_exit();
+			ft_exit("wrong format farm.", 1);
 		if (get_next_line(fd, line) <= 0)
 			break;
 	}
 }
 
-t_room *ft_parsing(void)
+char	*ft_parsing(void)
 {
 	char	*raw;
 	char	*line;
@@ -192,14 +172,13 @@ t_room *ft_parsing(void)
 	g_graph = NULL;
 	g_ants = 0;
 	g_len = 0;
-	raw = (char*) malloc(204800);
+	if (!(raw = (char*) malloc(204800)))
+		ft_exit(strerror(errno), errno);
 	*raw = 0;
 	ft_init_ant(raw);
 	ft_readroom(raw, &line);
 	if (!g_start || !g_exit || !g_graph || !g_ants)
-		ft_exit();
+		ft_exit("wrong format farm.", 1);
 	ft_readlink(raw, &line);
-	write(1, raw, (size_t)g_len);
-	free(raw);
-	return (g_graph);
+	return (raw);
 }

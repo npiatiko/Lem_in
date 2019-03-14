@@ -59,8 +59,8 @@ t_link	*ft_linknew(t_room *room)
 {
 	t_link *newlink;
 
-	if ((newlink = (t_link *)malloc(sizeof(t_link))) == NULL)
-		return (NULL);
+	if (!(newlink = (t_link *)malloc(sizeof(t_link))))
+		ft_exit(strerror(errno), errno);
 	newlink->room = room;
 	newlink->next = NULL;
 	return (newlink);
