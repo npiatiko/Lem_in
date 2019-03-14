@@ -40,20 +40,18 @@ t_way	*ft_search_way(t_room *graph)
 	return (allways);
 }
 
-int		main(void)
+int		main(int ac, char **av)
 {
 	t_way			*allways;
 	t_routearray	*arraylist;
-	char 			*input;
+	char			*input;
 	int				iter;
 
 	fd = 0;
-//	fd = open(FILENAME, O_RDONLY);
 	input = ft_parsing();
 	if (!(allways = ft_search_way(g_graph)))
 		ft_exit("ways not found.", 56);
 	write(1, input, (size_t)g_len);
-//	ft_print_ways(allways);
 	arraylist = ft_listroutearray(allways, g_graph);
 	ft_print_ways(ft_bestroutearray(arraylist)->way);
 	iter = ft_printmoves(ft_bestroutearray(arraylist));

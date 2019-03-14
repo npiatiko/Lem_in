@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   aux_fns1.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: npiatiko <npiatiko@student.unit.ua>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/03/14 13:06:10 by npiatiko          #+#    #+#             */
+/*   Updated: 2019/03/14 13:06:11 by npiatiko         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lemin.h"
 
-void ft_exit(char *errormsg, int errn)
+void	ft_exit(char *errormsg, int errn)
 {
 	ft_printf("\033[31mError: %s\033[38m\n", errormsg);
 	exit(errn);
@@ -17,14 +29,12 @@ void	ft_print_list_links(t_link *way)
 	}
 }
 
-void ft_print_graph(t_room *head)
+void	ft_print_graph(t_room *head)
 {
 	while (head)
 	{
-		t_link *tmp;
-
-		ft_printf("room name :%s, %c, dist = %d, used = %d", head->name, head->type, head->dist, head->used);
-//		tmp = head->links;
+		ft_printf("room name :%s, %c, dist = %d, used = %d",
+				head->name, head->type, head->dist, head->used);
 		if (head->links)
 			ft_printf(" links to: ");
 		ft_print_list_links(head->links);
@@ -47,10 +57,9 @@ void	ft_print_ways(t_way *listways)
 		listways = listways->next_way;
 	}
 	ft_printf("\n");
-
 }
 
-int	ft_count_char(char *line, char c)
+int		ft_count_char(char *line, char c)
 {
 	int i;
 

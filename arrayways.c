@@ -17,7 +17,7 @@ t_routearray	*ft_new_routearray(t_way *allways, t_way *currentway)
 	t_routearray *newarray;
 
 	ft_visitroom(currentway);
-	if(!(newarray = (t_routearray *)malloc(sizeof(t_routearray))))
+	if (!(newarray = (t_routearray *)malloc(sizeof(t_routearray))))
 		ft_exit(strerror(errno), errno);
 	newarray->way = ft_waynew(currentway->way);
 	newarray->next_array = 0;

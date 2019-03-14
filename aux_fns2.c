@@ -60,7 +60,7 @@ int		ft_routecheck(t_way *way)
 	return (1);
 }
 
-int ft_isnbr(char *str)
+int		ft_isnbr(char *str)
 {
 	while (*str)
 	{
@@ -68,5 +68,5 @@ int ft_isnbr(char *str)
 			return (0);
 		str++;
 	}
-	return 1;
+	return (1);
 }

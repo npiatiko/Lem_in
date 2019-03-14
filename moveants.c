@@ -51,6 +51,7 @@ void	ft_moveant(t_link *curway, int expression)
 		curway->next->room->ant = 0;
 	}
 }
+
 void	ft_print_moveant(t_link *curway, int expression)
 {
 	while (curway->next && g_exit->ant != g_ants)

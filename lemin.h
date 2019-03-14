@@ -62,7 +62,6 @@ void	ft_link_push_front(t_link **queue, t_link *newlink);
 t_link	*ft_link_pop(t_link **queue);
 t_link	*ft_linknew(t_room *room);
 void	ft_link_push_back(t_link **queue, t_link *newlink);
-void	ft_queue_rot(t_link **queue);
 void	ft_print_graph(t_room *head);
 void	ft_print_ways(t_way *listways);
 int		ft_isnbr(char *str);
@@ -95,4 +94,6 @@ void	ft_queue_pop(t_link **queue);
 void			ft_visitroom(t_way *way);
 int				ft_routecheck(t_way *way);
 int		ft_itercounter(t_routearray *arraylist);
+void	ft_readroom(char *raw, char **line);
+void	ft_readcomments(char *line, char *typeroom, char *raw);
 #endif

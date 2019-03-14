@@ -75,15 +75,13 @@ t_way	*ft_way_pop(t_way **listway, t_link **tmpway)
 
 void	ft_way_insert(t_way **listway, t_way *newway)
 {
-	t_way *head;
+	t_way head;
 	t_way *tmp;
 	t_way *prev;
 
-	if (!(head = (t_way*)malloc(sizeof(t_way))))
-		ft_exit(strerror(errno), errno);
-	head->next_way = *listway;
-	prev = head;
-	tmp = head->next_way;
+	head.next_way = *listway;
+	prev = &head;
+	tmp = head.next_way;
 	while (prev->next_way)
 	{
 		if (newway->lenway <= tmp->lenway)
@@ -93,6 +91,5 @@ void	ft_way_insert(t_way **listway, t_way *newway)
 	}
 	prev->next_way = newway;
 	newway->next_way = tmp;
-	*listway = head->next_way;
-	free(head);
+	*listway = head.next_way;
 }
