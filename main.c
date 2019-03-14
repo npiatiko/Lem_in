@@ -29,7 +29,7 @@ void	ft_help(void)
 {
 	ft_printf("\033[31musage : lem-in [--aceh] < [map]\n\t--c - colour output."
 		"\n\t--a - display additional information."
-	"\n\t--e - display error message\n\t--h - display this message.\033[38m\n");
+	"\n\t--e - display error message\n\t--h - display this message.\033[m\n");
 	exit(43);
 }
 
@@ -104,7 +104,6 @@ int		main(int ac, char **av)
 	if (ft_strchr(g_params, 'a'))
 		ft_print_ways(ft_bestroutearray(arraylist)->way);
 	iter = ft_printmoves(ft_bestroutearray(arraylist));
-	system("leaks -q Lem_in");
 	if (ft_strchr(g_params, 'a'))
 	{
 		ft_printf("my iter = %d   required = %d\n", iter, g_required);
